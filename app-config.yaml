@@ -81,7 +81,7 @@ proxy:
 techdocs:
   builder: 'local' # Alternatives - 'external'
   generator:
-    runIn: 'local' # Alternatives - 'local'
+    runIn: local # Alternatives - 'local'
   publisher:
     type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
 
@@ -91,12 +91,30 @@ auth:
   providers:
     github:
       development:
-        # clientId: 'Ov23liqlJ8REmzDjf4nV' 
-        # clientSecret: '3597cc63442e4643f542dd23070c1cdec74e3c62'
         clientId: 'Ov23liqlJ8REmzDjf4nV' 
         clientSecret: '3597cc63442e4643f542dd23070c1cdec74e3c62'
+        # clientId: ${AUTH_GITHUB_CLIENT_ID} 
+        # clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
   # see https://backstage.io/docs/ai/mcp-actions#client-id-metadata-documents
   # to learn more about client id metadata documents
+    okta:
+      development:
+        clientId: '0oa13xyyfwp0dahuw698'
+        clientSecret: 'xLceEDW6g8yHI7uDFrQCqon7a7GKhAmIrCuyxLU_KyHRFrWAX6Ve_gQgrIeVxXHo'
+        audience: 'https://trial-7958725.okta.com'
+        # clientId: ${AUTH_OKTA_CLIENT_ID}
+        # clientSecret: ${AUTH_OKTA_CLIENT_SECRET}
+        # audience: ${AUTH_OKTA_DOMAIN}
+        # authServerId: ${AUTH_OKTA_AUTH_SERVER_ID} # Optional
+        # idp: ${AUTH_OKTA_IDP} # Optional
+        ## uncomment to set lifespan of user session
+        # sessionDuration: { hours: 24 } # Optional: supports `ms` library format (e.g. '24h', '2 days'), ISO duration, "human duration" as used in code
+        # https://developer.okta.com/docs/reference/api/oidc/#scope-dependent-claims-not-always-returned
+        # additionalScopes: ${AUTH_OKTA_ADDITIONAL_SCOPES} # Optional
+        # signIn:
+        #   resolvers:
+        #     # See https://backstage.io/docs/auth/okta/provider#resolvers for more resolvers
+        #     - resolver: emailMatchingUserEntityAnnotation
   experimentalClientIdMetadataDocuments:
     enabled: false
     # Optional: restrict which `client_id` URLs are allowed (defaults to ['*'])

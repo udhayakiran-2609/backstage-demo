@@ -8,14 +8,14 @@
 
 import { createBackend } from '@backstage/backend-defaults';
 import { createBackendModule } from '@backstage/backend-plugin-api';
-import { githubAuthenticator } from '@backstage/plugin-auth-backend-module-github-provider';
+import { oktaAuthenticator } from '@backstage/plugin-auth-backend-module-okta-provider';
+
 import {
   authProvidersExtensionPoint,
   createOAuthProviderFactory,
 } from '@backstage/plugin-auth-node';
 import { stringifyEntityRef } from '@backstage/catalog-model';
 const backend = createBackend();
-
 backend.add(import('@backstage/plugin-app-backend'));
 backend.add(import('@backstage/plugin-proxy-backend'));
 
@@ -74,66 +74,47 @@ backend.add(import('@backstage/plugin-signals-backend'));
 backend.add(import('@backstage/plugin-mcp-actions-backend'));
 
 
-const customAuth = createBackendModule({
-  // This ID must be exactly "auth" because that's the plugin it targets
+export const customAuth = createBackendModule({
   pluginId: 'auth',
-  // This ID must be unique, but can be anything
-  moduleId: 'custom-auth-provider',
+  moduleId: 'custom-okta-auth',
+
   register(reg) {
     reg.registerInit({
-      deps: { providers: authProvidersExtensionPoint },
+      deps: {
+        providers: authProvidersExtensionPoint,
+      },
       async init({ providers }) {
         providers.registerProvider({
-          // This ID must match the actual provider config, e.g. addressing
-          // auth.providers.github means that this must be "github".
-          providerId: 'github',
-          // Use createProxyAuthProviderFactory instead if it's one of the proxy
-          // based providers rather than an OAuth based one
+          providerId: 'okta',
+
           factory: createOAuthProviderFactory({
-            authenticator: githubAuthenticator,
-            // File: packages/backend/src/plugins/auth.ts
+            authenticator: oktaAuthenticator,
 
-            // ...
-            async signInResolver({ profile: { email } }, ctx) {
+            async signInResolver(info, ctx) {
+              const email = info.profile.email;
+
               if (!email) {
-                throw new Error('User profile contained no email');
+                throw new Error('No email found in Okta profile');
               }
+              // const allowedDomain = 'mycompany.com';
 
-              // This step calls the catalog to look up a user entity. You could for example
-              // replace it with a call to a different external system.
-              // const { entity } = await ctx.findCatalogUser({
-              //   annotations: {
-              //     'acme.org/email': email,
-              //   },
-              // });
+              // if (!email.toLowerCase().endsWith(`@${allowedDomain}`)) {
+              //   throw new Error('User is not part of the organization');
+              // }
 
-              // In this step we extract the ownership references from the user entity using
-              // the standard logic. It uses a reference to the entity itself, as well as the
-              // target of each `memberOf` relation where the target is of the kind `Group`.
-              //
-              // If you replace the catalog lookup with something that does not return
-              // an entity you will need to replace this step as well.
-              //
-              // You might also replace it if you for example want to filter out certain groups.
-              //
-              // Note that `ctx.resolveOwnershipEntityRefs(...)` by default only includes groups
-              // to which the user has a direct MEMBER_OF relationship.
-              // It's perfectly fine to include groups that the user is transitively part of
-              // in the claims array, but the catalog doesn't currently provide a direct
-              // way of accessing this list of groups.
-              // By using `stringifyEntityRef` we ensure that the reference is formatted correctly
-            const userEntity = stringifyEntityRef({
-              kind: 'User',
-              name: email,
-              namespace: 'default',
-            });
-            return ctx.issueToken({
-              claims: {
-                sub: userEntity,
-                ent: [userEntity],
-              },
-            });
-            }
+              const userRef = stringifyEntityRef({
+                kind: 'User',
+                namespace: 'default',
+                name: email.split('@')[0].toLowerCase(),
+              });
+
+              return ctx.issueToken({
+                claims: {
+                  sub: userRef,
+                  ent: [userRef],
+                },
+              });
+            },
           }),
         });
       },
@@ -141,9 +122,6 @@ const customAuth = createBackendModule({
   },
 });
 
-// backend.add(import('@backstage/plugin-auth-backend-module-github-provider'));
 backend.add(customAuth);
-
-
 
 backend.start();
