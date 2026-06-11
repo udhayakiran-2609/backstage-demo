@@ -1,8 +1,7 @@
 FROM node:22-bookworm-slim AS build
 
-RUN apt-get update && apt-get install -y \
-    python3 make g++ git && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y python3 make g++ git \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
@@ -12,15 +11,15 @@ COPY packages ./packages
 COPY app-config.yaml .
 
 RUN yarn install --immutable
-RUN yarn tsc
-RUN yarn build:backend
+
+# Skip tsc, go straight to backend build
+RUN yarn workspace backend build
 
 # --- Production ---
 FROM node:22-bookworm-slim
 
-RUN apt-get update && apt-get install -y \
-    python3 python3-pip git && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y python3 python3-pip git \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install mkdocs-techdocs-core --break-system-packages
 
