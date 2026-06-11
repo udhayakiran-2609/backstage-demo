@@ -65,7 +65,13 @@
   "packageManager": "yarn@4.4.1",
   "dependencies": {
     "@backstage/backend-defaults": "^0.17.2",
+    "@backstage/plugin-auth-backend": "^0.29.0",
+    "@backstage/plugin-auth-backend-module-google-provider": "^0.3.15",
     "@backstage/plugin-catalog-backend-module-github": "^0.13.2",
+    "@backstage/plugin-github-actions": "^0.6.16",
+    "@backstage/plugin-techdocs": "^1.17.6",
+    "@backstage/plugin-techdocs-backend": "^2.2.0",
+    "@backstage/plugin-techdocs-node": "^1.15.0",
     "dotenv": "^17.4.2"
   }
 }
