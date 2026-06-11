@@ -1,12 +1,12 @@
 app:
   title: My Company Developer Portal
-  baseUrl: https://backstage-beindiansai.uc.a.run.app
+  baseUrl: https://backstage-629511660633.us-central1.run.app
 
 organization:
   name: My Company
 
 backend:
-  baseUrl: https://backstage-beindiansai.uc.a.run.app
+  baseUrl: https://backstage-629511660633.us-central1.run.app
 
   listen:
     port: ${PORT}
@@ -18,7 +18,7 @@ backend:
 
   cors:
     origin:
-      - https://backstage-beindiansai.uc.a.run.app
+      - https://backstage-629511660633.us-central1.run.app
     methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
     credentials: true
 
