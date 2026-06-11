@@ -5,14 +5,17 @@ RUN apt-get update && apt-get install -y python3 make g++ git \
 
 WORKDIR /app
 
+# Copy dependency files first (for cache efficiency)
 COPY package.json yarn.lock .yarnrc.yml ./
 COPY .yarn ./.yarn
-COPY packages ./packages
-COPY app-config.yaml .
+COPY packages/app/package.json ./packages/app/package.json
+COPY packages/backend/package.json ./packages/backend/package.json
 
 RUN yarn install --immutable
 
-# Skip tsc, go straight to backend build
+# Copy ALL source files
+COPY . .
+
 RUN yarn workspace backend build
 
 # --- Production ---
