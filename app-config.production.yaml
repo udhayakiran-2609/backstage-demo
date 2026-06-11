@@ -43,11 +43,11 @@ integrations:
 auth:
   environment: production
   providers:
-    okta:
-      production:
-        clientId: ${AUTH_OKTA_CLIENT_ID}
-        clientSecret: ${AUTH_OKTA_CLIENT_SECRET}
-        audience: ${AUTH_OKTA_AUDIENCE}
+    # okta:
+    #   production:
+    #     clientId: ${AUTH_OKTA_CLIENT_ID}
+    #     clientSecret: ${AUTH_OKTA_CLIENT_SECRET}
+    #     audience: ${AUTH_OKTA_AUDIENCE}
     google:
       production:
         clientId: ${AUTH_GOOGLE_CLIENT_ID}
