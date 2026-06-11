@@ -60,7 +60,7 @@ integrations:
     - host: github.com
       # This is a Personal Access Token or PAT from GitHub. You can find out how to generate this token, and more information
       # about setting up the GitHub integration here: https://backstage.io/docs/integrations/github/locations#configuration
-      token: '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'
+      token: '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'
       # token: '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'
     ### Example for how to add your GitHub Enterprise instance using the API:
     # - host: ghe.example.net
@@ -103,6 +103,12 @@ auth:
         clientId: '0oa13xyyfwp0dahuw698'
         clientSecret: 'xLceEDW6g8yHI7uDFrQCqon7a7GKhAmIrCuyxLU_KyHRFrWAX6Ve_gQgrIeVxXHo'
         audience: 'https://trial-7958725.okta.com'
+    google:
+      development:
+        clientId: '404360002837-6gd9t0vl06s64prips4db9a7ukjumvic.apps.googleusercontent.com'
+        clientSecret: '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'
+        # clientId: ${AUTH_GOOGLE_CLIENT_ID}
+        # clientSecret: ${AUTH_GOOGLE_CLIENT_SECRET}
         # clientId: ${AUTH_OKTA_CLIENT_ID}
         # clientSecret: ${AUTH_OKTA_CLIENT_SECRET}
         # audience: ${AUTH_OKTA_DOMAIN}
@@ -139,31 +145,30 @@ catalog:
     pullRequestBranchName: backstage-integration
   rules:
       - allow: [Component, System, API, Resource, Location,Group, User, Template]
-  locations:
     # Local example data, file locations are relative to the backend process, typically `packages/backend`
-    - type: file
-      target: ../../examples/entities.yaml
+    # - type: file
+    #   target: ../../examples/entities.yaml
 
-    # Local example template
-    - type: file
-      target: ../../examples/template/template.yaml
-      rules:
-        - allow: [Template]
+    # # Local example template
+    # - type: file
+    #   target: ../../examples/template/template.yaml
+    #   rules:
+    #     - allow: [Template]
 
     # Local example organizational data
-    - type: file
-      target: ../../examples/org.yaml
-      rules:
-        - allow: [User, Group]
+    # - type: file
+    #   target: ../../examples/org.yaml
+    #   rules:
+    #     - allow: [User, Group]
 
     ## Uncomment these lines to add more example data
     # - type: url
     #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all.yaml
 
-    - type: url
-      target: https://github.com/udhayakiran-stack/template-structure/blob/main/template.yaml
-      rules:
-        - allow: [Template]
+    # - type: url
+    #   target: https://github.com/udhayakiran-stack/template-structure/blob/main/template.yaml
+    #   rules:
+    #     - allow: [Template]
     ## Uncomment these lines to add an example org
     # - type: url
     #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/acme-corp.yaml
@@ -171,6 +176,15 @@ catalog:
     #     - allow: [User, Group]
 
 kubernetes:
+  # serviceLocatorMethod:
+  #   type: multiTenant
+
+  # clusterLocatorMethods:
+  #   - type: config
+
+  #     clusters:
+  #       - name: gke-prod
+  #         authProvider: google
   # see https://backstage.io/docs/features/kubernetes/configuration for kubernetes configuration options
 
 # see https://backstage.io/docs/permissions/getting-started for more on the permission framework

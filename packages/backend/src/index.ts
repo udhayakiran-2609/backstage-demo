@@ -7,14 +7,8 @@
  */
 
 import { createBackend } from '@backstage/backend-defaults';
-import { createBackendModule } from '@backstage/backend-plugin-api';
-import { oktaAuthenticator } from '@backstage/plugin-auth-backend-module-okta-provider';
-
-import {
-  authProvidersExtensionPoint,
-  createOAuthProviderFactory,
-} from '@backstage/plugin-auth-node';
-import { stringifyEntityRef } from '@backstage/catalog-model';
+import { customGoogleAuthModule } from './plugins/googleAuth';
+import { customOktaAuth } from './plugins/oktaAuth';
 const backend = createBackend();
 backend.add(import('@backstage/plugin-app-backend'));
 backend.add(import('@backstage/plugin-proxy-backend'));
@@ -74,54 +68,8 @@ backend.add(import('@backstage/plugin-signals-backend'));
 backend.add(import('@backstage/plugin-mcp-actions-backend'));
 
 
-export const customAuth = createBackendModule({
-  pluginId: 'auth',
-  moduleId: 'custom-okta-auth',
-
-  register(reg) {
-    reg.registerInit({
-      deps: {
-        providers: authProvidersExtensionPoint,
-      },
-      async init({ providers }) {
-        providers.registerProvider({
-          providerId: 'okta',
-
-          factory: createOAuthProviderFactory({
-            authenticator: oktaAuthenticator,
-
-            async signInResolver(info, ctx) {
-              const email = info.profile.email;
-
-              if (!email) {
-                throw new Error('No email found in Okta profile');
-              }
-              // const allowedDomain = 'mycompany.com';
-
-              // if (!email.toLowerCase().endsWith(`@${allowedDomain}`)) {
-              //   throw new Error('User is not part of the organization');
-              // }
-
-              const userRef = stringifyEntityRef({
-                kind: 'User',
-                namespace: 'default',
-                name: email.split('@')[0].toLowerCase(),
-              });
-
-              return ctx.issueToken({
-                claims: {
-                  sub: userRef,
-                  ent: [userRef],
-                },
-              });
-            },
-          }),
-        });
-      },
-    });
-  },
-});
-
-backend.add(customAuth);
+  
+backend.add(customGoogleAuthModule);
+backend.add(customOktaAuth);
 
 backend.start();
