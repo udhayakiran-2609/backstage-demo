@@ -237,8 +237,7 @@ integrations:
 
 auth:
   environment: development
-  providers:
-    guest: {}
+  providers: {}
 
 techdocs:
   builder: local
