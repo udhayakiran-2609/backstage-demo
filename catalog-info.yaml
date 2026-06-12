@@ -4,9 +4,8 @@ metadata:
   name: backstatedemo
   description: An example of a Backstage application
   annotations:
-    backstage.io/techdocs-ref: dir: .
+    backstage.io/techdocs-ref: dir:.
 spec:
   type: website
-  owner: john@example.com
+  owner: team-platform
   lifecycle: experimental
-  
