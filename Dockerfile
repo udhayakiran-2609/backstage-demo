@@ -31,12 +31,12 @@ RUN tar xzf bundle.tar.gz && rm bundle.tar.gz
 
 COPY --from=build /app/node_modules ./node_modules
 
-COPY app-config.yaml .
+# COPY app-config.yaml .
 COPY app-config.production.yaml .
 
 ENV NODE_ENV=production
+ENV PORT=8080
 EXPOSE 8080
 
 CMD ["node", "packages/backend", \
-     "--config", "app-config.yaml", \
      "--config", "app-config.production.yaml"]
