@@ -70,8 +70,8 @@ backend.add(import('@backstage/plugin-mcp-actions-backend'));
 
 
   
-// backend.add(customGoogleAuthModule);
-// backend.add(customOktaAuth);
-backend.add(import('@backstage/plugin-auth-backend-module-google-provider'));
-backend.add(import('@backstage/plugin-auth-backend-module-okta-provider'));
+backend.add(customGoogleAuthModule);
+backend.add(customOktaAuth);
+// backend.add(import('@backstage/plugin-auth-backend-module-google-provider'));
+// backend.add(import('@backstage/plugin-auth-backend-module-okta-provider'));
 backend.start();
