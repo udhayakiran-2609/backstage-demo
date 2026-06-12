@@ -2,6 +2,9 @@ app:
   title: My Company Developer Portal
   baseUrl: https://backstage-629511660633.us-central1.run.app
 
+organization:
+  name: My Company
+
 backend:
   baseUrl: https://backstage-629511660633.us-central1.run.app
   listen:
@@ -12,7 +15,6 @@ backend:
       - type: static
         options:
           token: ${BACKEND_SECRET}
-          subject: legacy-default-config
   cors:
     origin:
       - https://backstage-629511660633.us-central1.run.app
