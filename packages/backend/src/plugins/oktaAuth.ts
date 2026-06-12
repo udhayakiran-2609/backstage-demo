@@ -37,6 +37,7 @@ export const customOktaAuth = createBackendModule({
               //   throw new Error('User is not part of the organization');
               // }
 
+              
               const userRef = stringifyEntityRef({
                 kind: 'User',
                 namespace: 'default',
