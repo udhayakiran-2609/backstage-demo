@@ -1,7 +1,10 @@
 app:
   title: My Company Developer Portal
   baseUrl: https://backstage-629511660633.us-central1.run.app
-
+  extensions:
+    - page:catalog:
+        config:
+          path: /
 organization:
   name: My Company
 
