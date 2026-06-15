@@ -241,12 +241,12 @@ auth:
   providers:
     guest: {}
 
-techdocs:
-  builder: local
-  generator:
-    runIn: local
-  publisher:
-    type: local
+# techdocs:
+#   builder: local
+#   generator:
+#     runIn: local
+#   publisher:
+#     type: local
 
 scaffolder:
   defaultAuthor:
