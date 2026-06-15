@@ -60,7 +60,7 @@ auth:
         audience: ${AUTH_OKTA_AUDIENCE}
 
 techdocs:
-  builder: local
+  builder: external      
   generator:
     runIn: local
   publisher:
