@@ -63,7 +63,8 @@
 #       token: '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'
 #       webhookSecret: '6d60a096c93c60163d4bd37e09977c7999fbf7914d3ddca94e5d2051558b7e7e'
 
-#       # token: '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'
+#       # token: ${GITHUB_TOKEN}
+#       # webhookSecret: ${GITHUB_WEBHOOK_SECRET}
 #     ### Example for how to add your GitHub Enterprise instance using the API:
 #     # - host: ghe.example.net
 #     #   apiBaseUrl: https://ghe.example.net/api/v3
@@ -102,13 +103,13 @@
 #   # to learn more about client id metadata documents
 #     okta:
 #       development:
-#         clientId: '0oa13xyyfwp0dahuw698'
-#         clientSecret: 'xLceEDW6g8yHI7uDFrQCqon7a7GKhAmIrCuyxLU_KyHRFrWAX6Ve_gQgrIeVxXHo'
-#         audience: 'https://trial-7958725.okta.com'
+#         clientId: ${AUTH_OKTA_CLIENT_ID}
+#         clientSecret: ${AUTH_OKTA_CLIENT_SECRET}
+#         audience: ${AUTH_OKTA_AUDIENCE}
 #     google:
 #       development:
-#         clientId: '5448985382-ehq8l5p47ach7l689ednab9t5c40og1t.apps.googleusercontent.com'
-#         clientSecret: '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'
+#         clientId: ${AUTH_GOOGLE_CLIENT_ID}
+#         clientSecret: ${AUTH_GOOGLE_CLIENT_SECRET}
 #         # clientId: ${AUTH_GOOGLE_CLIENT_ID}
 #         # clientSecret: ${AUTH_GOOGLE_CLIENT_SECRET}
 #         # clientId: ${AUTH_OKTA_CLIENT_ID}
