@@ -23,7 +23,7 @@ backend.add(
 
 // techdocs plugin
 backend.add(import('@backstage/plugin-techdocs-backend'));
-backend.add(import('@backstage/plugin-catalog-backend-module-github'));
+// backend.add(import('@backstage/plugin-catalog-backend-module-github'));
 
 
 // auth plugin
@@ -72,6 +72,15 @@ backend.add(import('@backstage/plugin-mcp-actions-backend'));
   
 backend.add(customGoogleAuthModule);
 backend.add(customOktaAuth);
+
+
+// Webhook
+
+// Webhook
+backend.add(import('@backstage/plugin-events-backend/alpha'));
+backend.add(import('@backstage/plugin-events-backend-module-github'));
+backend.add(import('@backstage/plugin-catalog-backend-module-github/alpha')); // ← add this
+
 // backend.add(import('@backstage/plugin-auth-backend-module-google-provider'));
 // backend.add(import('@backstage/plugin-auth-backend-module-okta-provider'));
 backend.start();

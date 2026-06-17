@@ -60,7 +60,8 @@
 #     - host: github.com
 #       # This is a Personal Access Token or PAT from GitHub. You can find out how to generate this token, and more information
 #       # about setting up the GitHub integration here: https://backstage.io/docs/integrations/github/locations#configuration
-#       token: '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'
+#       token: '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'
+#       webhookSecret: '6d60a096c93c60163d4bd37e09977c7999fbf7914d3ddca94e5d2051558b7e7e'
 
 #       # token: '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'
 #     ### Example for how to add your GitHub Enterprise instance using the API:
@@ -106,8 +107,8 @@
 #         audience: 'https://trial-7958725.okta.com'
 #     google:
 #       development:
-#         clientId: '629511660633-f7fq2jk16fequnhlnof8q8oqnscuci08.apps.googleusercontent.com'
-#         clientSecret: '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'
+#         clientId: '5448985382-ehq8l5p47ach7l689ednab9t5c40og1t.apps.googleusercontent.com'
+#         clientSecret: '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'
 #         # clientId: ${AUTH_GOOGLE_CLIENT_ID}
 #         # clientSecret: ${AUTH_GOOGLE_CLIENT_SECRET}
 #         # clientId: ${AUTH_OKTA_CLIENT_ID}
@@ -141,11 +142,16 @@
 #   # see https://backstage.io/docs/features/software-templates/configuration for software template options
 
 # catalog:
-#   import:
-#     entityFilename: catalog-info.yaml
-#     pullRequestBranchName: backstage-integration
 #   rules:
-#       - allow: [Component, System, API, Resource, Location,Group, User, Template]
+#     - allow: [Component, System, API, Resource, Location, Group, User, Template]
+#   # locations:
+#   #   - type: url
+#   #     target: https://github.com/udhayakiran-2609/template-structure/blob/main/catalog-info.yaml
+#   #     rules:
+#   #       - allow: [Location, Template, Group]  
+
+#   processingInterval: { seconds: 30 }
+#   refreshInterval:    { seconds: 30 }
 #     # Local example data, file locations are relative to the backend process, typically `packages/backend`
 #     # - type: file
 #     #   target: ../../examples/entities.yaml
@@ -177,15 +183,15 @@
 #     #     - allow: [User, Group]
 
 # kubernetes:
-#   # serviceLocatorMethod:
-#   #   type: multiTenant
+#   serviceLocatorMethod:
+#     type: multiTenant
 
-#   # clusterLocatorMethods:
-#   #   - type: config
-
-#   #     clusters:
-#   #       - name: gke-prod
-#   #         authProvider: google
+#   clusterLocatorMethods:
+#     - type: gke
+#       projectId: backstage-demo-499507
+#       region: asia-south1
+#   googleServiceAccount:
+#     $file: ./backstage-key.json
 #   # see https://backstage.io/docs/features/kubernetes/configuration for kubernetes configuration options
 
 # # see https://backstage.io/docs/permissions/getting-started for more on the permission framework
@@ -235,6 +241,7 @@ integrations:
   github:
     - host: github.com
       token: ${GITHUB_TOKEN}
+      webhookSecret: ${GITHUB_WEBHOOK_SECRET}
 
 auth:
   environment: development
