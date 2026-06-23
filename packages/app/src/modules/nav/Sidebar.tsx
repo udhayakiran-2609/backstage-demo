@@ -12,9 +12,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import { SidebarSearchModal } from '@backstage/plugin-search';
 import { UserSettingsSignInAvatar } from '@backstage/plugin-user-settings';
-import { NotificationsSidebarItem } from '@backstage/plugin-notifications';
 import { makeStyles } from '@material-ui/core/styles';
-
+import CampaignIcon from '@material-ui/icons/AcUnit';
 const useStyles = makeStyles((theme) => ({
     '@global': {
     /* =========================
@@ -47,10 +46,6 @@ const useStyles = makeStyles((theme) => ({
       background: '#FFFFFF !important',
       borderBottom: '1px solid #F3F4F6 !important',
     },
-
-    /* =========================
-       SEARCH
-    ========================= */
 
     'button[class*="SidebarSearchModal"]': {
       background: '#F9FAFB !important',
@@ -215,6 +210,7 @@ export const SidebarContent = NavContentBlueprint.make({
           {/* <SidebarDivider /> */}
 
           {/* <NotificationsSidebarItem /> */}
+          <SidebarItem icon={CampaignIcon} to="banner-admin" text="Banner Admin" />
 
           <SidebarDivider />
 

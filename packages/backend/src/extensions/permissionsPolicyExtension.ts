@@ -3,11 +3,20 @@ import {
   PolicyDecision,
   AuthorizeResult,
 } from '@backstage/plugin-permission-common';
-import { PermissionPolicy } from '@backstage/plugin-permission-node';
+import {
+  PermissionPolicy,
+  PolicyQuery,
+} from '@backstage/plugin-permission-node';
 import { policyExtensionPoint } from '@backstage/plugin-permission-node/alpha';
 
-class TestPermissionPolicy implements PermissionPolicy {
-  async handle(): Promise<PolicyDecision> {
+class CustomPermissionPolicy implements PermissionPolicy {
+  async handle(request: PolicyQuery): Promise<PolicyDecision> {
+    if (request.permission.name === 'catalog.entity.delete') {
+      return {
+        result: AuthorizeResult.DENY,
+      };
+    }
+
     return { result: AuthorizeResult.ALLOW };
   }
 }
@@ -19,7 +28,7 @@ export default createBackendModule({
     reg.registerInit({
       deps: { policy: policyExtensionPoint },
       async init({ policy }) {
-        policy.setPolicy(new TestPermissionPolicy());
+        policy.setPolicy(new CustomPermissionPolicy());
       },
     });
   },

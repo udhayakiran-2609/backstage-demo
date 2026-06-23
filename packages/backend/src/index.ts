@@ -20,6 +20,8 @@ backend.add(
   import('@backstage/plugin-scaffolder-backend-module-notifications'),
 );
 
+import bannersPlugin from '../../../plugins/banners-backend/src';
+backend.add(bannersPlugin);
 
 
 // techdocs plugin
@@ -42,6 +44,9 @@ backend.add(import('@backstage/plugin-catalog-backend-module-logs'));
 
 // permission plugin
 backend.add(import('@backstage/plugin-permission-backend'));
+// backend.add(import('./extensions/permissionsPolicyExtension'));
+
+
 // See https://backstage.io/docs/permissions/getting-started for how to create your own permission policy
 backend.add(
   import('@backstage/plugin-permission-backend-module-allow-all-policy'),

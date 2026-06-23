@@ -1,9 +1,14 @@
 import React, { useState, useCallback } from 'react';
-import { useActiveBanners } from '../../modules/banner/useActiveBanners';
+import { useActiveBanners } from '../../../../../plugins/banners-admin/src/hooks/useActiveBanners';
 import { BannerStrip } from './BannerStrip';
 
+/**
+ * Reads live banners from the backend database via useActiveBanners().
+ * Supports carousel navigation when multiple banners are active.
+ * Rendered via AppRootElementBlueprint — mounts above every page.
+ */
 export function BannerProvider() {
-  const { activeBanners, dismiss } = useActiveBanners();
+  const { activeBanners, dismiss, loading } = useActiveBanners();
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const safeIndex = Math.min(currentIndex, Math.max(activeBanners.length - 1, 0));
@@ -21,15 +26,16 @@ export function BannerProvider() {
     setCurrentIndex(i => Math.max(Math.min(i, activeBanners.length - 2), 0));
   }, [dismiss, activeBanners.length]);
 
-  if (activeBanners.length === 0) return null;
+  if (loading || activeBanners.length === 0) return null;
+
+  const banner = activeBanners[safeIndex];
 
   return (
-    <div style={{ position: 'relative', zIndex: 1300 }}>
+    <div style={{ width: '100%', position: 'relative', zIndex: 99999999 }}>
       <BannerStrip
-        key={activeBanners[safeIndex].id}
-        banner={activeBanners[safeIndex]}
+        key={banner.id}
+        banner={banner}
         onDismiss={handleDismiss}
-        // Carousel controls — only shown when >1 banner
         showPrev={safeIndex > 0}
         showNext={safeIndex < activeBanners.length - 1}
         onPrev={handlePrev}

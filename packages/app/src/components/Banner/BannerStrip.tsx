@@ -6,9 +6,12 @@ import Button from '@material-ui/core/Button';
 import CloseIcon from '@material-ui/icons/Close';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import { BannerConfig, BannerVariant } from '../../modules/banner/bannerConfig';
+// ↓ Use the API Banner type from the plugin — NOT the static BannerConfig
+import { Banner } from '../../../../../plugins/banners-admin/src/api/BannersClient';
 
-// ── Palette (unchanged) ────────────────────────────────────────────────────
+type BannerVariant = Banner['variant']; // 'release' | 'info' | 'success' | 'warning'
+
+// ── Palette ────────────────────────────────────────────────────────────────
 const VARIANT_STYLES: Record<
   BannerVariant,
   { bg: string; text: string; accent: string; border: string }
@@ -78,11 +81,7 @@ const useStyles = makeStyles({
     minWidth: 0,
     flexWrap: 'wrap' as const,
   },
-  badge: {
-    fontSize: '1.15rem',
-    lineHeight: 1,
-    flexShrink: 0,
-  },
+  badge: { fontSize: '1.15rem', lineHeight: 1, flexShrink: 0 },
   titleChip: (props: { variant: BannerVariant }) => {
     const s = VARIANT_STYLES[props.variant];
     return {
@@ -105,12 +104,7 @@ const useStyles = makeStyles({
     lineHeight: 1.4,
     opacity: 0.9,
   }),
-  actions: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '4px',
-    flexShrink: 0,
-  },
+  actions: { display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 },
   ctaButton: (props: { variant: BannerVariant }) => {
     const s = VARIANT_STYLES[props.variant];
     return {
@@ -123,10 +117,7 @@ const useStyles = makeStyles({
       minWidth: 'unset',
       whiteSpace: 'nowrap' as const,
       marginRight: 4,
-      '&:hover': {
-        background: `${s.accent}18`,
-        borderColor: s.accent,
-      },
+      '&:hover': { background: `${s.accent}18`, borderColor: s.accent },
     };
   },
   navBtn: (props: { variant: BannerVariant }) => ({
@@ -164,7 +155,7 @@ const useStyles = makeStyles({
 
 // ── Component ──────────────────────────────────────────────────────────────
 interface BannerStripProps {
-  banner: BannerConfig;
+  banner: Banner;            // ← was BannerConfig, now the API Banner type
   onDismiss: (id: string) => void;
   showPrev?: boolean;
   showNext?: boolean;
@@ -191,9 +182,7 @@ export function BannerStrip({
     <div className={classes.root} role="status" aria-live="polite">
       <div className={classes.left}>
         {banner.badge && (
-          <span className={classes.badge} aria-hidden="true">
-            {banner.badge}
-          </span>
+          <span className={classes.badge} aria-hidden="true">{banner.badge}</span>
         )}
         <span className={classes.titleChip}>{banner.title}</span>
         <Typography component="span" className={classes.message}>
@@ -203,17 +192,11 @@ export function BannerStrip({
 
       <div className={classes.actions}>
         {banner.ctaLabel && banner.ctaHref && (
-          <Button
-            variant="outlined"
-            size="small"
-            href={banner.ctaHref}
-            className={classes.ctaButton}
-          >
+          <Button variant="outlined" size="small" href={banner.ctaHref} className={classes.ctaButton}>
             {banner.ctaLabel} →
           </Button>
         )}
 
-        {/* ── Carousel navigation ── */}
         {isCarousel && (
           <>
             <span className={classes.divider} aria-hidden="true" />
@@ -226,7 +209,10 @@ export function BannerStrip({
             >
               <ChevronLeftIcon fontSize="small" />
             </IconButton>
-            <span className={classes.pagination} aria-label={`Banner ${(currentIndex ?? 0) + 1} of ${totalCount}`}>
+            <span
+              className={classes.pagination}
+              aria-label={`Banner ${(currentIndex ?? 0) + 1} of ${totalCount}`}
+            >
               {(currentIndex ?? 0) + 1}/{totalCount}
             </span>
             <IconButton

@@ -80,6 +80,8 @@ catalog:
     pullRequestBranchName: backstage-integration
   rules:
     - allow: [Component, System, API, Resource, Location, Group, User, Template]
+  processingInterval: { seconds: 30 }
+  refreshInterval:    { seconds: 30 }
   locations:
     - type: url
       target: https://github.com/udhayakiran-2609/template-structure/blob/main/catalog-info.yaml
