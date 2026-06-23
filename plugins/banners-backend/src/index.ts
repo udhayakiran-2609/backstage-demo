@@ -1,3 +1,4 @@
+import path from 'path';
 import {
   coreServices,
   createBackendPlugin,
@@ -14,19 +15,22 @@ export const bannersPlugin = createBackendPlugin({
         database: coreServices.database,
         logger: coreServices.logger,
       },
+
       async init({ httpRouter, database, logger }) {
         const client = await database.getClient();
-        if (!database.migrations?.skip) {
-          await client.migrate.latest({
-            directory: `${__dirname}/migrations`,
-          });
-        }
+
+        await client.migrate.latest({
+          directory: path.join(__dirname, 'migrations'),
+        });
 
         const db = new BannerDatabase(client);
         const router = createBannersRouter(db);
 
         httpRouter.use(router);
-        logger.info('Banners plugin initialized — REST API ready at /api/banners');
+
+        logger.info(
+          'Banners plugin initialized — REST API ready at /api/banners',
+        );
       },
     });
   },
