@@ -1,0 +1,68 @@
+{
+  "global": {
+    "id": "global-v1",
+    "title": "Platform v3 is live!",
+    "message": "Faster search, redesigned service pages, and one-click scaffolding.",
+    "imageUrl": "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1400&q=80",
+    "ctaLabel": "See what's new",
+    "ctaHref": "/docs/default/component/platform-v3-changelog",
+    "activeFrom": "2025-01-01",
+    "activeTo": "2026-12-31"
+  },
+  "pages": [
+    {
+      "id": "catalog-banner-q3",
+      "routes": ["/catalog", "/"],
+      "title": "Discover your services",
+      "message": "Browse all 200+ registered components. Register yours in 2 minutes.",
+      "imageUrl": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1400&q=80",
+      "emptyStateImageUrl": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=900&q=80",
+      "emptyStateTitle": "Nothing registered yet",
+      "emptyStateMessage": "Your catalog is empty. Start by registering your first component.",
+      "ctaLabel": "+ Register a component",
+      "ctaHref": "/catalog-import",
+      "activeFrom": "2025-01-01",
+      "activeTo": "2026-12-31"
+    },
+    {
+      "id": "docs-banner-q3",
+      "routes": ["/docs"],
+      "title": "TechDocs — your knowledge hub",
+      "message": "All engineering docs live here. Add mkdocs.yml to any repo and they appear automatically.",
+      "imageUrl": "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=1400&q=80",
+      "emptyStateImageUrl": "https://images.unsplash.com/photo-1456324504439-367cee3b3c32?w=900&q=80",
+      "emptyStateTitle": "No docs yet",
+      "emptyStateMessage": "Add a docs/ folder and mkdocs.yml to your repo — they'll appear here automatically.",
+      "ctaLabel": "How to add docs",
+      "ctaHref": "/docs/default/component/techdocs-getting-started",
+      "activeFrom": "2025-01-01",
+      "activeTo": "2026-12-31"
+    },
+    {
+      "id": "apis-banner-q3",
+      "routes": ["/api-docs"],
+      "title": "API catalogue",
+      "message": "All internal and external APIs in one place. Click any entry for full specs.",
+      "imageUrl": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1400&q=80",
+      "emptyStateImageUrl": "https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=900&q=80",
+      "emptyStateTitle": "No APIs registered",
+      "emptyStateMessage": "Register an API kind entity in your catalog-info.yaml to see it here.",
+      "ctaLabel": "API registration guide",
+      "ctaHref": "/docs/default/component/api-registration",
+      "activeFrom": "2025-01-01",
+      "activeTo": "2026-12-31"
+    },
+    {
+      "id": "notifications-banner",
+      "routes": ["/notifications"],
+      "title": "Stay in the loop",
+      "message": "Notifications from CI, deployments, and alerts appear here in real time.",
+      "imageUrl": "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=1400&q=80",
+      "emptyStateImageUrl": "https://images.unsplash.com/photo-1614680376739-414d95ff43df?w=900&q=80",
+      "emptyStateTitle": "All caught up!",
+      "emptyStateMessage": "No notifications right now. They'll appear here when your pipelines or services need attention.",
+      "activeFrom": "2025-01-01",
+      "activeTo": "2026-12-31"
+    }
+  ]
+}

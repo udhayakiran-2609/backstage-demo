@@ -1,62 +1,68 @@
 
 
-# Test
 
 
-app:
-  title: Scaffolded Backstage App
-  baseUrl: http://localhost:3000
-  packages: all
 
-organization:
-  name: My Company
 
-backend:
-  baseUrl: http://localhost:7007
-  listen:
-    port: 7007
-    host: 0.0.0.0
-  database:
-    client: better-sqlite3
-    connection: ':memory:'
-  cors:
-    origin: http://localhost:3000
-    methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
-    credentials: true
-  reading:
-    allow:
-      - host: raw.githubusercontent.com
-      - host: github.com
 
-integrations:
-  github:
-    - host: github.com
-      token: ${GITHUB_TOKEN}
-      webhookSecret: ${GITHUB_WEBHOOK_SECRET}
 
-auth:
-  environment: development
-  providers:
-    guest: {}
 
-techdocs:
-  builder: local
-  generator:
-    runIn: local
-  publisher:
-    type: local
+# Prod
 
-scaffolder:
-  defaultAuthor:
-    name: Backstage
-    email: backstage@elitecorpusa.com
+# app:
+#   title: Scaffolded Backstage App
+#   baseUrl: http://localhost:3000
+#   packages: all
 
-catalog:
-  import:
-    entityFilename: catalog-info.yaml
-    pullRequestBranchName: backstage-integration
-  rules:
-    - allow: [Component, System, API, Resource, Location, Group, User, Template]
+# organization:
+#   name: My Company
 
-permission:
-  enabled: true
+# backend:
+#   baseUrl: http://localhost:7007
+#   listen:
+#     port: 7007
+#     host: 0.0.0.0
+#   database:
+#     client: better-sqlite3
+#     connection: ':memory:'
+#   cors:
+#     origin: http://localhost:3000
+#     methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+#     credentials: true
+#   reading:
+#     allow:
+#       - host: raw.githubusercontent.com
+#       - host: github.com
+
+# integrations:
+#   github:
+#     - host: github.com
+#       token: ${GITHUB_TOKEN}
+#       webhookSecret: ${GITHUB_WEBHOOK_SECRET}
+
+# auth:
+#   environment: development
+#   providers:
+#     guest: {}
+
+# techdocs:
+#   builder: local
+#   generator:
+#     runIn: local
+#   publisher:
+#     type: local
+
+# scaffolder:
+#   defaultAuthor:
+#     name: Backstage
+#     email: backstage@elitecorpusa.com
+
+# catalog:
+#   import:
+#     entityFilename: catalog-info.yaml
+#     pullRequestBranchName: backstage-integration
+#   rules:
+#     - allow: [Component, System, API, Resource, Location, Group, User, Template]
+
+# permission:
+#   enabled: true

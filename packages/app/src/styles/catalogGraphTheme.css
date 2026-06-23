@@ -1,0 +1,522 @@
+﻿/* ================================================================
+   BACKSTAGE CATALOG GRAPH — THEME-AWARE STYLES (v3)
+   :root variables and @keyframes stay top-level and ungated (they do
+   nothing on their own). Every rule that actually paints something is
+   wrapped in ONE consistent gate: html:not([data-cg-theme="default"]).
+   ================================================================ */
+
+:root {
+  /* Backgrounds */
+  --cg-bg-start:   #1e1b4b;
+  --cg-bg-mid:     #2d1b69;
+  --cg-bg-end:     #1e3a8a;
+  --cg-bg: radial-gradient(ellipse at top left, rgba(99, 102, 241, 0.18) 0%, transparent 55%),
+           radial-gradient(ellipse at bottom right, rgba(244, 114, 182, 0.12) 0%, transparent 55%),
+           linear-gradient(135deg, var(--cg-bg-start) 0%, var(--cg-bg-mid) 50%, var(--cg-bg-end) 100%);
+  --cg-surface:     rgba(15, 23, 42, 0.96);
+  --cg-surface-alt: rgba(30, 27, 75, 0.9);
+  --cg-border:      rgba(167, 139, 250, 0.25);
+  --cg-border-strong: rgba(167, 139, 250, 0.45);
+
+  --cg-text:           #f1f5f9;
+  --cg-text-secondary: #94a3b8;
+
+  --cg-node-component: #61dafb;
+  --cg-node-api:       #f472b6;
+  --cg-node-system:    #a78bfa;
+  --cg-node-domain:    #fbbf24;
+  --cg-node-resource:  #34d399;
+  --cg-node-group:     #fb923c;
+  --cg-node-user:      #e879f9;
+  --cg-node-default:   #94a3b8;
+
+  --cg-edge-provides:  #34d399;
+  --cg-edge-consumes:  #f87171;
+  --cg-edge-owns:      #61dafb;
+  --cg-edge-dependsOn: #fb923c;
+  --cg-edge-default:   rgba(167, 139, 250, 0.4);
+
+  --cg-primary:   var(--cg-node-component);
+  --cg-secondary: var(--cg-node-api);
+  --cg-tertiary:  var(--cg-node-system);
+  --cg-accent:    var(--cg-node-domain);
+  --cg-success:   var(--cg-edge-provides);
+  --cg-danger:    var(--cg-edge-consumes);
+  --cg-warning:   var(--cg-node-group);
+  --cg-shadow:    0 0 50px rgba(97,218,251,0.12), 0 0 100px rgba(244,114,182,0.07);
+
+  --cg-z-canvas:   0;
+  --cg-z-panel:    10;
+  --cg-z-themebar: 20;
+  --cg-z-overlay:  30;
+}
+
+@keyframes pulse-gentle {
+  0%, 100% { opacity: 0.75; }
+  50%       { opacity: 1; }
+}
+
+@keyframes highlight {
+  0%, 100% { filter: drop-shadow(0 2px 8px rgba(0,0,0,0.2)); }
+  50%       { filter: drop-shadow(0 4px 16px rgba(97,218,251,0.15)); }
+}
+
+/* ================================================================
+   GATE — single source of truth. Picker sets/removes data-cg-theme
+   on <html>. "default" (or attribute absent) ⇒ none of this applies.
+   ================================================================ */
+html:not([data-cg-theme="default"]) {
+
+  svg#dependency-graph,
+  div[class*='PluginCatalogGraphEntityRelationsGraph-graph'],
+  div[class*='PluginCatalogGraphPage-graphWrapper'] {
+    background: var(--cg-bg) !important;
+    background-attachment: fixed !important;
+    overflow: hidden !important;
+  }
+
+  div[class*='PluginCatalogGraphPage-graphWrapper'] {
+    position: relative !important;
+    isolation: isolate !important;
+    z-index: var(--cg-z-canvas) !important;
+    border: 1px solid var(--cg-border) !important;
+    border-radius: 16px !important;
+    box-shadow: var(--cg-shadow), inset 0 0 90px rgba(0, 0, 0, 0.25) !important;
+    backdrop-filter: blur(6px) !important;
+  }
+
+  div[class*='PluginCatalogGraphEntityRelationsGraph-container'] {
+    border-radius: 16px !important;
+  }
+
+  g[data-testid='node'] rect {
+    fill: var(--cg-surface-alt) !important;
+    stroke: var(--cg-node-default) !important;
+    stroke-width: 1.6px !important;
+    rx: 10 !important;
+    ry: 10 !important;
+    filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.35)) !important;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+                stroke 0.2s ease,
+                stroke-width 0.2s ease,
+                fill 0.2s ease !important;
+  }
+
+  g[data-testid='node']:hover rect {
+    transform: translateY(-4px) !important;
+    stroke-width: 2.2px !important;
+    fill: var(--cg-surface) !important;
+    filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.5)) !important;
+  }
+
+  g[data-testid='node'][data-kind='component'] rect,
+  g[data-testid='node'].node-kind-component rect,
+  g[data-testid='node'] rect.primary {
+    stroke: var(--cg-node-component) !important;
+    fill: color-mix(in srgb, var(--cg-node-component) 10%, var(--cg-surface-alt)) !important;
+  }
+
+  g[data-testid='node'][data-kind='component'] text,
+  g[data-testid='node'].node-kind-component text,
+  g[data-testid='node'] text.primary {
+    fill: var(--cg-node-component) !important;
+    font-weight: 700 !important;
+  }
+
+  g[data-testid='node'][data-kind='component']:hover rect,
+  g[data-testid='node'].node-kind-component:hover rect,
+  g[data-testid='node']:hover rect.primary {
+    filter: drop-shadow(0 10px 22px color-mix(in srgb, var(--cg-node-component) 35%, transparent)) !important;
+  }
+
+  g[data-testid='node'][data-kind='api'] rect,
+  g[data-testid='node'].node-kind-api rect,
+  g[data-testid='node'] rect.secondary {
+    stroke: var(--cg-node-api) !important;
+    fill: color-mix(in srgb, var(--cg-node-api) 10%, var(--cg-surface-alt)) !important;
+  }
+
+  g[data-testid='node'][data-kind='api'] text,
+  g[data-testid='node'].node-kind-api text,
+  g[data-testid='node'] text.secondary {
+    fill: var(--cg-node-api) !important;
+    font-weight: 700 !important;
+  }
+
+  g[data-testid='node'][data-kind='api']:hover rect,
+  g[data-testid='node'].node-kind-api:hover rect {
+    filter: drop-shadow(0 10px 22px color-mix(in srgb, var(--cg-node-api) 35%, transparent)) !important;
+  }
+
+  g[data-testid='node'][data-kind='system'] rect,
+  g[data-testid='node'].node-kind-system rect,
+  g[data-testid='node'] rect.tertiary {
+    stroke: var(--cg-node-system) !important;
+    fill: color-mix(in srgb, var(--cg-node-system) 10%, var(--cg-surface-alt)) !important;
+  }
+
+  g[data-testid='node'][data-kind='system'] text,
+  g[data-testid='node'].node-kind-system text,
+  g[data-testid='node'] text.tertiary {
+    fill: var(--cg-node-system) !important;
+    font-weight: 700 !important;
+  }
+
+  g[data-testid='node'][data-kind='domain'] rect,
+  g[data-testid='node'].node-kind-domain rect {
+    stroke: var(--cg-node-domain) !important;
+    fill: color-mix(in srgb, var(--cg-node-domain) 10%, var(--cg-surface-alt)) !important;
+  }
+
+  g[data-testid='node'][data-kind='domain'] text,
+  g[data-testid='node'].node-kind-domain text {
+    fill: var(--cg-node-domain) !important;
+  }
+
+  g[data-testid='node'][data-kind='resource'] rect,
+  g[data-testid='node'].node-kind-resource rect {
+    stroke: var(--cg-node-resource) !important;
+    fill: color-mix(in srgb, var(--cg-node-resource) 10%, var(--cg-surface-alt)) !important;
+  }
+
+  g[data-testid='node'][data-kind='resource'] text,
+  g[data-testid='node'].node-kind-resource text {
+    fill: var(--cg-node-resource) !important;
+  }
+
+  g[data-testid='node'][data-kind='group'] rect,
+  g[data-testid='node'].node-kind-group rect {
+    stroke: var(--cg-node-group) !important;
+    fill: color-mix(in srgb, var(--cg-node-group) 10%, var(--cg-surface-alt)) !important;
+  }
+
+  g[data-testid='node'][data-kind='group'] text,
+  g[data-testid='node'].node-kind-group text {
+    fill: var(--cg-node-group) !important;
+  }
+
+  g[data-testid='node'][data-kind='user'] rect,
+  g[data-testid='node'].node-kind-user rect {
+    stroke: var(--cg-node-user) !important;
+    fill: color-mix(in srgb, var(--cg-node-user) 10%, var(--cg-surface-alt)) !important;
+  }
+
+  g[data-testid='node'][data-kind='user'] text,
+  g[data-testid='node'].node-kind-user text {
+    fill: var(--cg-node-user) !important;
+  }
+
+  g[data-testid='node'] text {
+    fill: var(--cg-text) !important;
+    font-family: 'Fira Code', 'Monaco', 'Courier New', monospace !important;
+    font-weight: 600 !important;
+    font-size: 12px !important;
+    letter-spacing: 0.01em !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  }
+
+  svg#dependency-graph g[data-testid='node'].focused rect,
+  g.node.selected rect,
+  g.node.focused rect {
+    stroke-width: 2.6px !important;
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.22)) !important;
+  }
+
+  g.edge path,
+  g.edge line {
+    stroke: var(--cg-edge-default) !important;
+    stroke-width: 1.5px !important;
+    stroke-linecap: round !important;
+    stroke-linejoin: round !important;
+    opacity: 0.65 !important;
+    transition: stroke 0.2s ease, opacity 0.2s ease, stroke-width 0.2s ease !important;
+  }
+
+  g.edge:hover path,
+  g.edge:hover line,
+  svg#dependency-graph path[data-testid='edge']:hover,
+  svg#dependency-graph line[data-testid='edge']:hover {
+    stroke: var(--cg-node-component) !important;
+    stroke-width: 2.4px !important;
+    opacity: 1 !important;
+  }
+
+  g.edge.provides path, g.edge.provides line { stroke: var(--cg-edge-provides) !important; }
+  g.edge.consumes path, g.edge.consumes line { stroke: var(--cg-edge-consumes) !important; }
+  g.edge.owns path,     g.edge.owns line     { stroke: var(--cg-edge-owns) !important; }
+  g.edge.dependsOn path,g.edge.dependsOn line{ stroke: var(--cg-edge-dependsOn) !important; }
+
+  g.edge.focused path, g.edge.focused line {
+    stroke-width: 2.8px !important;
+    opacity: 1 !important;
+  }
+
+  svg#dependency-graph marker#arrow-marker path { fill: var(--cg-node-system) !important; }
+  marker.provides  { fill: var(--cg-edge-provides) !important; }
+  marker.consumes  { fill: var(--cg-edge-consumes) !important; }
+  marker.owns      { fill: var(--cg-edge-owns) !important; }
+  marker.dependsOn { fill: var(--cg-edge-dependsOn) !important; }
+
+  svg#dependency-graph g[data-testid='label'] text {
+    fill: var(--cg-text-secondary) !important;
+    font-family: 'Fira Code', 'Monaco', monospace !important;
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  .filters-container,
+  .catalog-graph-filters,
+  .breadcrumb,
+  .catalog-graph-breadcrumb,
+  .legend,
+  .catalog-graph-legend,
+  .info-panel,
+  .controls,
+  .catalog-graph-controls,
+  .context-menu,
+  .popup,
+  .tooltip {
+    position: relative !important;
+    z-index: var(--cg-z-panel) !important;
+    background: var(--cg-surface-alt) !important;
+    border: 1px solid var(--cg-border) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25) !important;
+    backdrop-filter: blur(10px) !important;
+    color: var(--cg-text) !important;
+    transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+  }
+
+  .filters-container,
+  .catalog-graph-filters {
+    border-radius: 12px !important;
+    padding: 16px !important;
+  }
+
+  .filters-container label,
+  .catalog-graph-filters label {
+    color: var(--cg-text-secondary) !important;
+    font-weight: 700 !important;
+    font-size: 11px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.07em !important;
+  }
+
+  .filters-container input,
+  .filters-container select,
+  .catalog-graph-filters input,
+  .catalog-graph-filters select {
+    background: var(--cg-surface) !important;
+    color: var(--cg-text) !important;
+    border: 1px solid var(--cg-border) !important;
+    border-radius: 7px !important;
+    padding: 8px 12px !important;
+    font-family: 'Fira Code', monospace !important;
+    font-size: 13px !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+  }
+
+  .filters-container input:focus,
+  .filters-container select:focus,
+  .catalog-graph-filters input:focus,
+  .catalog-graph-filters select:focus {
+    border-color: var(--cg-node-component) !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--cg-node-component) 18%, transparent) !important;
+  }
+
+  .filters-container button,
+  .catalog-graph-filters button {
+    background: linear-gradient(135deg, var(--cg-node-component), var(--cg-node-system)) !important;
+    color: #0f172a !important;
+    border: none !important;
+    border-radius: 7px !important;
+    padding: 10px 16px !important;
+    cursor: pointer !important;
+    font-weight: 700 !important;
+    font-size: 12px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease !important;
+  }
+
+  .filters-container button:hover,
+  .catalog-graph-filters button:hover {
+    transform: translateY(-2px) !important;
+    filter: brightness(1.08) !important;
+    box-shadow: 0 8px 22px color-mix(in srgb, var(--cg-node-component) 40%, transparent) !important;
+  }
+
+  .filters-container button:active,
+  .catalog-graph-filters button:active {
+    transform: translateY(0) !important;
+  }
+
+  .breadcrumb, .catalog-graph-breadcrumb,
+  .legend, .catalog-graph-legend,
+  .info-panel {
+    border-radius: 12px !important;
+    padding: 14px !important;
+  }
+
+  .breadcrumb a, .catalog-graph-breadcrumb a {
+    color: var(--cg-node-component) !important;
+    text-decoration: none !important;
+    font-weight: 600 !important;
+    transition: color 0.2s ease !important;
+  }
+
+  .breadcrumb a:hover, .catalog-graph-breadcrumb a:hover {
+    color: var(--cg-node-domain) !important;
+  }
+
+  .legend-item, .legend-entry {
+    margin: 8px 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    font-size: 13px !important;
+    color: var(--cg-text) !important;
+  }
+
+  .legend-color {
+    width: 14px !important;
+    height: 14px !important;
+    border-radius: 4px !important;
+    flex-shrink: 0 !important;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.08) !important;
+  }
+
+  .context-menu, .popup, .tooltip {
+    z-index: var(--cg-z-overlay) !important;
+    border-radius: 9px !important;
+  }
+
+  .context-menu-item, .popup-item, .tooltip-item {
+    padding: 10px 12px !important;
+    color: var(--cg-text) !important;
+    transition: background-color 0.15s ease, padding-left 0.15s ease !important;
+    font-size: 13px !important;
+    border-radius: 5px !important;
+  }
+
+  .context-menu-item:hover, .popup-item:hover, .tooltip-item:hover {
+    background-color: var(--cg-surface) !important;
+    border-left: 3px solid var(--cg-node-component) !important;
+    padding-left: 9px !important;
+  }
+
+  .controls, .catalog-graph-controls {
+    border-radius: 10px !important;
+    padding: 8px !important;
+    display: flex !important;
+    gap: 6px !important;
+  }
+
+  .controls button, .catalog-graph-controls button {
+    background: linear-gradient(135deg, var(--cg-node-system), var(--cg-node-component)) !important;
+    color: #0f172a !important;
+    border: none !important;
+    border-radius: 6px !important;
+    padding: 8px 12px !important;
+    cursor: pointer !important;
+    font-weight: 600 !important;
+    font-size: 11px !important;
+    transition: transform 0.18s ease, box-shadow 0.18s ease !important;
+  }
+
+  .controls button:hover, .catalog-graph-controls button:hover {
+    transform: scale(1.06) !important;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35) !important;
+  }
+
+  .controls button:active, .catalog-graph-controls button:active {
+    background: linear-gradient(135deg, var(--cg-node-api), var(--cg-node-domain)) !important;
+    transform: scale(0.97) !important;
+  }
+
+  .badge, .tag, .catalog-chip {
+    background: color-mix(in srgb, var(--cg-node-component) 14%, transparent) !important;
+    color: var(--cg-node-component) !important;
+    border: 1px solid var(--cg-node-component) !important;
+    border-radius: 6px !important;
+    padding: 4px 10px !important;
+    font-weight: 600 !important;
+    font-size: 11px !important;
+  }
+
+  .graph-theme-picker-bar {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: var(--cg-z-themebar) !important;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--cg-surface-alt) !important;
+    border-bottom: 1px solid var(--cg-border-strong) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+    backdrop-filter: blur(12px);
+    flex-wrap: wrap;
+    min-height: 44px;
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+
+  .graph-theme-picker-bar--floating {
+    position: absolute !important;
+    top: 12px !important;
+    right: 12px !important;
+    left: auto !important;
+    z-index: var(--cg-z-themebar) !important;
+    border-radius: 10px !important;
+    border: 1px solid var(--cg-border-strong) !important;
+    min-height: 0;
+  }
+
+  .graph-theme-picker-bar button,
+  .graph-theme-picker-bar [role='button'] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 7px !important;
+    border: 1px solid var(--cg-border) !important;
+    background: var(--cg-surface) !important;
+    color: var(--cg-text-secondary) !important;
+    cursor: pointer;
+    transition: transform 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+  }
+
+  .graph-theme-picker-bar button:hover,
+  .graph-theme-picker-bar [role='button']:hover {
+    transform: translateY(-1px) scale(1.05);
+    border-color: var(--cg-node-component) !important;
+    color: var(--cg-node-component) !important;
+  }
+
+  .graph-theme-picker-bar button[aria-pressed='true'],
+  .graph-theme-picker-bar .active {
+    border-color: var(--cg-node-component) !important;
+    color: var(--cg-node-component) !important;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--cg-node-component) 20%, transparent) !important;
+  }
+
+  g.node.loading rect { animation: pulse-gentle 2s ease-in-out infinite; }
+  g.edge.highlight path, g.edge.highlight line { animation: highlight 2s ease-in-out infinite; }
+
+  @media (max-width: 1200px) {
+    .filters-container, .catalog-graph-filters,
+    .legend, .catalog-graph-legend,
+    .info-panel, .breadcrumb, .catalog-graph-breadcrumb,
+    .controls, .catalog-graph-controls {
+      border-radius: 10px !important;
+    }
+    g.node text { font-size: 11px !important; }
+    .graph-theme-picker-bar--floating {
+      top: 8px !important;
+      right: 8px !important;
+    }
+  }
+}
