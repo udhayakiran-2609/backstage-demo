@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
     },
 
     dialogHeader: {
-        background: 'linear-gradient(135deg,#7c3aed,#3b82f6)',
+        background: 'linear-gradient(135deg,#0f172a 0%,#1e1b4b 45%,#1e3a5f 100%)',
         color: '#fff',
         padding: '24px 32px',
     },
@@ -97,7 +97,7 @@ const useStyles = makeStyles(theme => ({
         padding: '10px 22px',
         fontWeight: 700,
         background:
-            'linear-gradient(135deg,#7c3aed,#2563eb)',
+            'linear-gradient(135deg,#0f172a 0%,#1e1b4b 45%,#1e3a5f 100%)',
         color: '#fff',
     },
 

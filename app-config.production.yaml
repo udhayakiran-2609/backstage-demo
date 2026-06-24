@@ -3,6 +3,7 @@ app:
   baseUrl: https://backstage-5448985382.us-central1.run.app
   packages: all
   extensions:
+    - entity-card:catalog-graph/relations
     - page:catalog:
         config:
           path: /
