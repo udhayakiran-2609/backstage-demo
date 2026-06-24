@@ -22,7 +22,7 @@ steps:
       - '--memory=2Gi'
       - '--cpu=2'
       - '--min-instances=1'
-      - '--timeout=300'
+      - '--timeout=900'
       - '--allow-unauthenticated'
       - '--project=${PROJECT_ID}'
 
