@@ -20,7 +20,7 @@ import GridEntityRelationsCard  from './components/catalog/GridEntityRelationsCa
 
 
 import { bannerModule } from './modules/banner/bannerModule';
-import { bannersAdminPlugin } from '../../../plugins/banners-admin/src/plugin/plugin';
+import { bannersAdminPlugin } from './plugins/banners-admin/src/plugin/plugin';
 
 // import customCatalogModule from './modules/customCatalog/catalogModule';
 import {topNavbarModule} from './modules/topNavbar/topNavbarModule';

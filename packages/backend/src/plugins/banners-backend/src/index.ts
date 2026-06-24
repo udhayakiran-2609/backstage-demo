@@ -3,7 +3,7 @@ import {
   coreServices,
   createBackendPlugin,
 } from '@backstage/backend-plugin-api';
-import { createBannersRouter } from './router';
+import { createRouter } from './router';
 import { BannerDatabase } from './BannerDatabase';
 
 export const bannersPlugin = createBackendPlugin({
@@ -17,20 +17,22 @@ export const bannersPlugin = createBackendPlugin({
       },
 
       async init({ httpRouter, database, logger }) {
-        const client = await database.getClient();
+        const knex = await database.getClient();
 
-        await client.migrate.latest({
-          directory: path.join(__dirname, 'migrations'),
+        await knex.migrate.latest({
+          directory: path.resolve(__dirname, '../src/migrations'),
         });
 
-        const db = new BannerDatabase(client);
-        const router = createBannersRouter(db);
+        const db = new BannerDatabase(knex);
+
+        const router = await createRouter({
+          db,
+          logger,
+        });
 
         httpRouter.use(router);
 
-        logger.info(
-          'Banners plugin initialized — REST API ready at /api/banners',
-        );
+        logger.info('Banners plugin initialized');
       },
     });
   },

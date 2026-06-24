@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { useActiveBanners } from '../../../../../plugins/banners-admin/src/hooks/useActiveBanners';
+import { useActiveBanners } from './../../plugins/banners-admin/src/hooks/useActiveBanners';
 import { BannerStrip } from './BannerStrip';
 
 /**

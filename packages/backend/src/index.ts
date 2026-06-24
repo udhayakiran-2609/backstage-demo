@@ -20,7 +20,7 @@ backend.add(
   import('@backstage/plugin-scaffolder-backend-module-notifications'),
 );
 
-import bannersPlugin from '../../../plugins/banners-backend/src';
+import { bannersPlugin } from './plugins/banners-backend/src';
 backend.add(bannersPlugin);
 
 

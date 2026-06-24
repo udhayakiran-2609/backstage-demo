@@ -25,6 +25,8 @@ backend:
         options:
           token: ${BACKEND_SECRET}
           subject: legacy-default-config
+    keys:
+      - secret: ${BACKEND_AUTH_SECRET}
   cors:
     origin:
       - https://backstage-5448985382.us-central1.run.app
@@ -85,7 +87,7 @@ catalog:
   refreshInterval:    { seconds: 30 }
   locations:
     - type: url
-      target: https://github.com/udhayakiran-2609/template-structure/blob/main/catalog-info.yaml
+      target: target: https://raw.githubusercontent.com/udhayakiran-2609/template-structure/main/catalog-info.yaml
 
 permission:
   enabled: true

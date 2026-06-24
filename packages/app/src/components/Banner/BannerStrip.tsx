@@ -7,7 +7,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 // ↓ Use the API Banner type from the plugin — NOT the static BannerConfig
-import { Banner } from '../../../../../plugins/banners-admin/src/api/BannersClient';
+import { Banner } from './../../plugins/banners-admin/src/api/BannersClient';
 
 type BannerVariant = Banner['variant']; // 'release' | 'info' | 'success' | 'warning'
 
