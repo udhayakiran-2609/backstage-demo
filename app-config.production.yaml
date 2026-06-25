@@ -91,6 +91,17 @@ catalog:
   locations:
     - type: url
       target: https://raw.githubusercontent.com/udhayakiran-2609/template-structure/main/catalog-info.yaml
+      rules:
+        - allow:
+            - Location
+            - Component
+            - API
+            - System
+            - Domain
+            - Resource
+            - Template
+            - User      
+            - Group 
 
 
     - type: url
@@ -103,26 +114,26 @@ catalog:
         - allow: [Group, User]  
 
 permission:
-  enabled: true
+  enabled: false
 
-  rbac:
-  admin:
-    users:
-      - name: user:default/udhayakaran
-  pluginsWithPermission:
-    - catalog
-    - scaffolder
-    - permission
-  policies-csv-file: ./rbac/rbac-policy.csv
-  conditionalPoliciesFile: ./rbac/rbac-conditions.yaml
-  defaultPermissions:
-    defaultRole: role:default/user
-    basicPermissions:
-      - permission: catalog.entity.read
-        effect: allow
-      - permission: catalog.location.read
-        effect: allow
-      - permission: scaffolder.task.read
-        effect: allow
+  # rbac:
+  # admin:
+  #   users:
+  #     - name: user:default/udhayakaran
+  # pluginsWithPermission:
+  #   - catalog
+  #   - scaffolder
+  #   - permission
+  # policies-csv-file: ./rbac/rbac-policy.csv
+  # conditionalPoliciesFile: ./rbac/rbac-conditions.yaml
+  # defaultPermissions:
+  #   defaultRole: role:default/user
+  #   basicPermissions:
+  #     - permission: catalog.entity.read
+  #       effect: allow
+  #     - permission: catalog.location.read
+  #       effect: allow
+  #     - permission: scaffolder.task.read
+  #       effect: allow
         
   
