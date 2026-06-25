@@ -46,6 +46,12 @@ backend:
 
 dynamicPlugins:
   rootDirectory: dynamic-plugins-root
+  frontend:
+    internal.plugin-banner-admin:
+      disabled: false
+  backend:
+    internal.plugin-banner-admin-backend:
+      disabled: false
 
 integrations:
   github:

@@ -52,11 +52,11 @@ backend.add(import('@backstage/plugin-permission-backend'));
 // backend.add(import('./extensions/permissionsPolicyExtension'));
 // backend.add(BackstagePermissionPolicy);
 // backend.add(import('./extensions/catalogPermissionRules'))
-backend.add(import('@backstage-community/plugin-rbac-backend'))
+// backend.add(import('@backstage-community/plugin-rbac-backend'))
 // See https://backstage.io/docs/permissions/getting-started for how to create your own permission policy
-// backend.add(
-//   import('@backstage/plugin-permission-backend-module-allow-all-policy'),
-// );
+backend.add(
+  import('@backstage/plugin-permission-backend-module-allow-all-policy'),
+);
 
 // search plugin
 backend.add(import('@backstage/plugin-search-backend'));
