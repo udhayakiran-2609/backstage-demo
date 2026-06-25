@@ -1,46 +1,28 @@
 import { Knex } from 'knex';
 const { randomUUID } = require('crypto');
+
 export interface BannerRow {
-  id: string;
-  title: string;
-  message: string;
+  id: string; title: string; message: string;
   variant: 'release' | 'info' | 'success' | 'warning';
-  badge: string | null;
-  cta_label: string | null;
-  cta_href: string | null;
-  active_from: string;
-  active_to: string;
-  enabled: boolean;
-  created_at: string;
-  updated_at: string;
+  badge: string | null; cta_label: string | null; cta_href: string | null;
+  active_from: string; active_to: string; enabled: boolean;
+  created_at: string; updated_at: string;
 }
 
 export interface BannerInput {
-  title: string;
-  message: string;
+  title: string; message: string;
   variant?: 'release' | 'info' | 'success' | 'warning';
-  badge?: string;
-  ctaLabel?: string;
-  ctaHref?: string;
-  activeFrom: string;
-  activeTo: string;
-  enabled?: boolean;
+  badge?: string; ctaLabel?: string; ctaHref?: string;
+  activeFrom: string; activeTo: string; enabled?: boolean;
 }
 
 function toApiShape(row: BannerRow) {
   return {
-    id: row.id,
-    title: row.title,
-    message: row.message,
-    variant: row.variant,
-    badge: row.badge ?? undefined,
-    ctaLabel: row.cta_label ?? undefined,
-    ctaHref: row.cta_href ?? undefined,
-    activeFrom: row.active_from,
-    activeTo: row.active_to,
-    enabled: Boolean(row.enabled),
-    createdAt: row.created_at,
-    updatedAt: row.updated_at,
+    id: row.id, title: row.title, message: row.message, variant: row.variant,
+    badge: row.badge ?? undefined, ctaLabel: row.cta_label ?? undefined,
+    ctaHref: row.cta_href ?? undefined, activeFrom: row.active_from,
+    activeTo: row.active_to, enabled: Boolean(row.enabled),
+    createdAt: row.created_at, updatedAt: row.updated_at,
   };
 }
 
@@ -70,15 +52,10 @@ export class BannerDatabase {
   async create(input: BannerInput) {
     const id: string = randomUUID();
     await this.db<BannerRow>('banners').insert({
-      id,
-      title: input.title,
-      message: input.message,
-      variant: input.variant ?? 'info',
-      badge: input.badge ?? null,
-      cta_label: input.ctaLabel ?? null,
-      cta_href: input.ctaHref ?? null,
-      active_from: input.activeFrom,
-      active_to: input.activeTo,
+      id, title: input.title, message: input.message,
+      variant: input.variant ?? 'info', badge: input.badge ?? null,
+      cta_label: input.ctaLabel ?? null, cta_href: input.ctaHref ?? null,
+      active_from: input.activeFrom, active_to: input.activeTo,
       enabled: input.enabled ?? true,
     });
     return this.getById(id);
@@ -96,8 +73,7 @@ export class BannerDatabase {
     if (input.activeTo !== undefined) patch.active_to = input.activeTo;
     if (input.enabled !== undefined) patch.enabled = input.enabled;
     await this.db<BannerRow>('banners').where({ id }).update({
-      ...patch,
-      updated_at: new Date().toISOString(),
+      ...patch, updated_at: new Date().toISOString(),
     });
     return this.getById(id);
   }

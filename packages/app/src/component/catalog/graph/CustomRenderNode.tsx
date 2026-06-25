@@ -13,7 +13,7 @@ type RenderNodeProps = {
   };
   onClick?: () => void;
 };
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   node: {
     fill: 'rgba(15, 23, 42, 0.95)',
     stroke: '#61DAFB',

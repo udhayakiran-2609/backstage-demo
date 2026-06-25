@@ -1,4 +1,3 @@
-import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
@@ -7,7 +6,10 @@ import CloseIcon from '@material-ui/icons/Close';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 // ↓ Use the API Banner type from the plugin — NOT the static BannerConfig
-import { Banner } from './../../plugins/banners-admin/src/api/BannersClient';
+// import { Banner } from './../../plugins/banners-admin/src/api/BannersClient';
+
+import { Banner } from '@internal/plugin-banner-admin';
+
 
 type BannerVariant = Banner['variant']; // 'release' | 'info' | 'success' | 'warning'
 

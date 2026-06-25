@@ -33,6 +33,8 @@ export function migrateThemeId(raw: string | null): GraphThemeId {
 }
 
 export interface GraphThemeVars {
+  [key: string]: string;
+
   // Backgrounds
   '--cg-bg-start': string;
   '--cg-bg-mid': string;
@@ -40,9 +42,11 @@ export interface GraphThemeVars {
   '--cg-surface': string;
   '--cg-surface-alt': string;
   '--cg-border': string;
+
   // Text
   '--cg-text': string;
   '--cg-text-secondary': string;
+
   // Entity-kind node stroke + glow colours
   '--cg-node-component': string;
   '--cg-node-api': string;
@@ -52,6 +56,7 @@ export interface GraphThemeVars {
   '--cg-node-group': string;
   '--cg-node-user': string;
   '--cg-node-default': string;
+
   // Edge colours per relation type
   '--cg-edge-provides': string;
   '--cg-edge-consumes': string;

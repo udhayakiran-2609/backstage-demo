@@ -5,7 +5,6 @@
 
 
 
-
 # Prod
 
 app:
@@ -17,9 +16,9 @@ organization:
   name: My Company
 
 backend:
-  baseUrl: http://localhost:${port}
+  baseUrl: http://localhost:7007
   listen:
-    port: ${port}
+    port: 7007
     host: 0.0.0.0
   database:
     client: better-sqlite3

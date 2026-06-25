@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react';
+import  { createContext, useContext } from 'react';
 import { PageBannerConfig } from '../components/PageBanner/pageBannerTypes';
 
 interface PageBannerContextValue {

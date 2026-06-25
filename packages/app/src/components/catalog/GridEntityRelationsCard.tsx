@@ -20,7 +20,6 @@ import { useEntity, useRelatedEntities } from '@backstage/plugin-catalog-react';
 import {
   InfoCard,
   Link,
-  EmptyState,
 } from '@backstage/core-components';
 import {
   Box,

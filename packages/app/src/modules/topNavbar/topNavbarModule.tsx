@@ -14,7 +14,7 @@
  *   // add topNavbarModule to features[]
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   createFrontendModule,
   AppRootElementBlueprint,
@@ -492,7 +492,8 @@ function ProfileMenu() {
     async function init() {
       try {
         const identity = await identityApi.getBackstageIdentity();
-        if (!identity || identity.type === 'guest') return;
+        //  || identity.type === 'guest'
+        if (!identity) return;
         if (!cancelled) setIsAuthenticated(true);
         const info = await identityApi.getProfileInfo();
         if (!cancelled) setProfile({ displayName: info.displayName ?? 'Unknown User', email: info.email, picture: info.picture });
@@ -602,7 +603,8 @@ function TopNavbar() {
   useEffect(() => {
     let cancelled = false;
     identityApi.getBackstageIdentity()
-      .then(identity => { if (!cancelled && identity && identity.type !== 'guest') setIsAuthenticated(true); })
+    // && identity.type !== 'guest'
+      .then(identity => { if (!cancelled && identity ) setIsAuthenticated(true); })
       .catch(() => {});
     return () => { cancelled = true; };
   }, [identityApi]);

@@ -8,7 +8,6 @@ export async function createRouter(options: {
   logger: LoggerService;
 }): Promise<express.Router> {
   const { db, logger } = options;
-
   const router = Router();
   router.use(express.json());
 
@@ -22,86 +21,59 @@ export async function createRouter(options: {
     res.json({ banners });
   });
 
-  router.get('/:id', async (req: Request, res: Response) => {
+  router.get('/:id', async (req: Request, res: Response): Promise<void> => {
     const banner = await db.getById(req.params.id);
-
     if (!banner) {
-      return res.status(404).json({ error: 'Banner not found' });
+      res.status(404).json({ error: 'Banner not found' });
+      return;
     }
-
     res.json({ banner });
   });
 
-  router.post('/', async (req: Request, res: Response) => {
+  router.post('/', async (req: Request, res: Response): Promise<void> => {
     const input = req.body as BannerInput;
-
-    if (
-      !input?.title ||
-      !input?.message ||
-      !input?.activeFrom ||
-      !input?.activeTo
-    ) {
-      return res.status(400).json({
-        error: 'title, message, activeFrom, activeTo are required',
-      });
+    if (!input?.title || !input?.message || !input?.activeFrom || !input?.activeTo) {
+      res.status(400).json({ error: 'title, message, activeFrom, activeTo are required' });
+      return;
     }
-
     const banner = await db.create(input);
     res.status(201).json({ banner });
   });
 
-  router.put('/:id', async (req: Request, res: Response) => {
+  router.put('/:id', async (req: Request, res: Response): Promise<void> => {
     const existing = await db.getById(req.params.id);
-
     if (!existing) {
-      return res.status(404).json({ error: 'Banner not found' });
+      res.status(404).json({ error: 'Banner not found' });
+      return;
     }
-
-    const banner = await db.update(
-      req.params.id,
-      req.body as Partial<BannerInput>,
-    );
-
+    const banner = await db.update(req.params.id, req.body as Partial<BannerInput>);
     res.json({ banner });
   });
 
-  router.patch('/:id/toggle', async (req: Request, res: Response) => {
+  router.patch('/:id/toggle', async (req: Request, res: Response): Promise<void> => {
     const existing = await db.getById(req.params.id);
-
     if (!existing) {
-      return res.status(404).json({ error: 'Banner not found' });
+      res.status(404).json({ error: 'Banner not found' });
+      return;
     }
-
-    const banner = await db.update(req.params.id, {
-      enabled: !existing.enabled,
-    });
-
+    const banner = await db.update(req.params.id, { enabled: !existing.enabled });
     res.json({ banner });
   });
 
-  router.delete('/:id', async (req: Request, res: Response) => {
+  router.delete('/:id', async (req: Request, res: Response): Promise<void> => {
     const existing = await db.getById(req.params.id);
-
     if (!existing) {
-      return res.status(404).json({ error: 'Banner not found' });
+      res.status(404).json({ error: 'Banner not found' });
+      return;
     }
-
     await db.delete(req.params.id);
-
     res.status(204).send();
   });
 
-  router.use(
-    (
-      err: Error,
-      _req: Request,
-      res: Response,
-      _next: NextFunction,
-    ) => {
-      logger.error(err.message);
-      res.status(500).json({ error: err.message });
-    },
-  );
+  router.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
+    logger.error(err.message);
+    res.status(500).json({ error: err.message });
+  });
 
   return router;
 }

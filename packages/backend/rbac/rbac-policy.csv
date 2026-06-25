@@ -1,0 +1,112 @@
+# =============================================================================
+# BACKSTAGE RBAC POLICY
+# Roles: admin | owner | user
+# Format: p, <role>, <permission>, <action>, <allow|deny>
+#         g, <user|group>, <role>
+# =============================================================================
+
+# ─── ADMIN ROLE: Full unrestricted access ─────────────────────────────────────
+
+## Catalog
+p, role:default/admin, catalog-entity,                    read,   allow
+p, role:default/admin, catalog-entity,                    update, allow
+p, role:default/admin, catalog-entity,                    delete, allow
+p, role:default/admin, catalog.entity.create,             create, allow
+p, role:default/admin, catalog.entity.refresh,            use,    allow
+p, role:default/admin, catalog.location.create,           create, allow
+p, role:default/admin, catalog.location.delete,           delete, allow
+p, role:default/admin, catalog.location.read,             read,   allow
+
+## Scaffolder
+p, role:default/admin, scaffolder.task.create,            create, allow
+p, role:default/admin, scaffolder.task.read,              read,   allow
+p, role:default/admin, scaffolder.task.cancel,            use,    allow
+p, role:default/admin, scaffolder.template.parameter.read,read,   allow
+p, role:default/admin, scaffolder.template.step.read,     read,   allow
+p, role:default/admin, scaffolder-action,                 use,    allow
+
+## TechDocs
+p, role:default/admin, techdocs.entity.read,              read,   allow
+
+## Permission / RBAC UI
+p, role:default/admin, policy-entity,                     read,   allow
+p, role:default/admin, policy-entity,                     create, allow
+p, role:default/admin, policy-entity,                     update, allow
+p, role:default/admin, policy-entity,                     delete, allow
+
+# ─── OWNER ROLE: CRUD on owned entities (conditions applied in YAML) ──────────
+
+## Catalog — full access to owned entities (conditional rules in rbac-conditions.yaml)
+p, role:default/owner, catalog-entity,                    read,   allow
+p, role:default/owner, catalog-entity,                    update, allow
+p, role:default/owner, catalog-entity,                    delete, allow
+p, role:default/owner, catalog.entity.create,             create, allow
+p, role:default/owner, catalog.entity.refresh,            use,    allow
+p, role:default/owner, catalog.location.read,             read,   allow
+
+## Scaffolder — create tasks, read own tasks, cancel own
+p, role:default/owner, scaffolder.task.create,            create, allow
+p, role:default/owner, scaffolder.task.read,              read,   allow
+p, role:default/owner, scaffolder.task.cancel,            use,    allow
+p, role:default/owner, scaffolder.template.parameter.read,read,   allow
+p, role:default/owner, scaffolder.template.step.read,     read,   allow
+p, role:default/owner, scaffolder-action,                 use,    allow
+
+## TechDocs
+p, role:default/owner, techdocs.entity.read,              read,   allow
+
+## RBAC UI — read-only (owners can view but not manage policies)
+p, role:default/owner, policy-entity,                     read,   deny
+p, role:default/owner, policy-entity,                     create, deny
+p, role:default/owner, policy-entity,                     update, deny
+p, role:default/owner, policy-entity,                     delete, deny
+
+# ─── USER ROLE: Read-only catalog, run own scaffolder tasks ───────────────────
+
+## Catalog — read only, no delete/create
+p, role:default/user, catalog-entity,                     read,   allow
+p, role:default/user, catalog-entity,                     update, deny
+p, role:default/user, catalog-entity,                     delete, deny
+p, role:default/user, catalog.entity.create,              create, deny
+p, role:default/user, catalog.entity.refresh,             use,    deny
+p, role:default/user, catalog.location.create,            create, deny
+p, role:default/user, catalog.location.delete,            delete, deny
+p, role:default/user, catalog.location.read,              read,   allow
+
+## Scaffolder — can create tasks and read only their own
+p, role:default/user, scaffolder.task.create,             create, allow
+p, role:default/user, scaffolder.task.read,               read,   allow
+p, role:default/user, scaffolder.task.cancel,             use,    deny
+p, role:default/user, scaffolder.template.parameter.read, read,   allow
+p, role:default/user, scaffolder.template.step.read,      read,   allow
+p, role:default/user, scaffolder-action,                  use,    allow
+
+## TechDocs — read only
+p, role:default/user, techdocs.entity.read,               read,   allow
+
+## RBAC UI — no access
+p, role:default/user, policy-entity,                      read,   deny
+p, role:default/user, policy-entity,                      create, deny
+p, role:default/user, policy-entity,                      update, deny
+p, role:default/user, policy-entity,                      delete, deny
+
+# =============================================================================
+# GROUP → ROLE ASSIGNMENTS
+# Static admins: only 4 owner emails, rest is dynamic via catalog group membership
+# =============================================================================
+
+# Static owner/admin users (4 max — use real username part of email)
+g, user:default/owner_one,   role:default/admin
+g, user:default/owner_two,   role:default/admin
+g, user:default/owner_three, role:default/admin
+g, user:default/owner_four,  role:default/admin
+
+# Group-based role assignments — DYNAMIC: add users to catalog groups
+g, group:default/admins,     role:default/admin
+g, group:default/owners,     role:default/owner
+g, group:default/engineering, role:default/owner
+g, group:default/platform,   role:default/owner
+
+# Every authenticated user gets the user role (catch-all)
+# This is handled by the permission policy code (permissionPolicy.ts)
+# All other google-authenticated users → role:default/user (dynamic in policy)

@@ -1,0 +1,1 @@
+export { bannerAdminBackendPlugin as default } from './plugin';

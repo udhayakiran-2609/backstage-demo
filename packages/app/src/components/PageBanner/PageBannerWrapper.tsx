@@ -1,4 +1,4 @@
-import React, { ReactNode, useRef } from 'react';
+import  { ReactNode, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { usePageBanners } from '../../hooks/usePageBanners';
 import { useEmptyStateDetector } from '../../hooks/useEmptyStateDetector';

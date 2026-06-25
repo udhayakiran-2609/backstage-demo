@@ -16,7 +16,6 @@
 // });
 
 
-import React from 'react';
 import { createFrontendModule, createExtension, coreExtensionData } from '@backstage/frontend-plugin-api';
 import { GraphThemePickerGlobal } from '../components/GraphThemePicker';
 

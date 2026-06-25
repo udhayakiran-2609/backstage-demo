@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import  { useState, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { EntityCatalogGraphCard } from '@backstage/plugin-catalog-graph';
 import { MenuItem, MenuList, Paper, ClickAwayListener, Button } from '@material-ui/core';

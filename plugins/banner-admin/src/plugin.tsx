@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   createFrontendPlugin,
   PageBlueprint,
@@ -9,14 +8,18 @@ import {
   discoveryApiRef,
   fetchApiRef,
 } from '@backstage/core-plugin-api';
-import { bannersApiRef, BannersClient } from '../api/BannersClient';
+
+import { bannersApiRef, BannersClient } from './api/BannersClient';
 
 const bannerAdminPage = PageBlueprint.make({
   name: 'banner-admin-page',
   params: {
     path: '/banner-admin',
     loader: async () => {
-      const { BannerAdminPage } = await import('../components/BannerAdminPage');
+      const { BannerAdminPage } = await import(
+        './components/BannerAdminPage'
+      );
+
       return <BannerAdminPage />;
     },
   },
@@ -28,14 +31,19 @@ const bannersApiExtension = ApiBlueprint.make({
     defineParams(
       createApiFactory({
         api: bannersApiRef,
-        deps: { discoveryApi: discoveryApiRef, fetchApi: fetchApiRef },
+        deps: {
+          discoveryApi: discoveryApiRef,
+          fetchApi: fetchApiRef,
+        },
         factory: ({ discoveryApi, fetchApi }) =>
           new BannersClient(discoveryApi, fetchApi),
       }),
     ),
 });
 
-export const bannersAdminPlugin = createFrontendPlugin({
-  pluginId: 'banners-admin',
+export const bannerAdminPlugin = createFrontendPlugin({
+  pluginId: 'banner-admin',
   extensions: [bannerAdminPage, bannersApiExtension],
 });
+
+export default bannerAdminPlugin;

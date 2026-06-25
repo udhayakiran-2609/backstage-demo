@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import  { useCallback, useEffect, useState } from 'react';
 import {
   Progress,
   ResponseErrorPanel,
@@ -12,7 +12,6 @@ import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import Chip from '@material-ui/core/Chip';
 import Switch from '@material-ui/core/Switch';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
@@ -29,7 +28,6 @@ import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import LinkIcon from '@material-ui/icons/Link';
 import EventIcon from '@material-ui/icons/Event';
 import { bannersApiRef, Banner, BannerInput } from '../api/BannersClient';

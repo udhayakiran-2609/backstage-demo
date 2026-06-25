@@ -15,13 +15,13 @@ function isActive(activeFrom: string, activeTo: string): boolean {
   return now >= new Date(activeFrom).getTime() && now <= new Date(activeTo).getTime();
 }
 
-function readDismissed(id: string): boolean {
-  try {
-    return localStorage.getItem(`${STORAGE_PREFIX}${id}`) === '1';
-  } catch {
-    return false;
-  }
-}
+// function readDismissed(id: string): boolean {
+//   try {
+//     return localStorage.getItem(`${STORAGE_PREFIX}${id}`) === '1';
+//   } catch {
+//     return false;
+//   }
+// }
 
 function writeDismissed(id: string): void {
   try {

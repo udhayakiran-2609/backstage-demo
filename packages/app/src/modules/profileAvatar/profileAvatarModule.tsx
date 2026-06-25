@@ -182,7 +182,8 @@ function ProfileAvatar() {
       try {
         const identity = await identityApi.getBackstageIdentity();
         // Guest / anonymous users have type 'guest' — not signed in
-        if (!identity || identity.type === 'guest') {
+        // identity.type === 'guest'
+        if (!identity) {
           if (!cancelled) setLoading(false);
           return;
         }

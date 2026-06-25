@@ -1,11 +1,10 @@
-import React from 'react';
 import { createApp } from '@backstage/frontend-defaults';
 import catalogPlugin from '@backstage/plugin-catalog/alpha';
 import { navModule } from './modules/nav';
 import { oktaAuthApiRef, googleAuthApiRef } from '@backstage/core-plugin-api';
 import { SignInPageBlueprint } from '@backstage/plugin-app-react';
 import { SignInPage } from '@backstage/core-components';
-import { createFrontendModule , AppRootElementBlueprint} from '@backstage/frontend-plugin-api';
+import { createFrontendModule} from '@backstage/frontend-plugin-api';
 import techRadarPlugin from '@backstage-community/plugin-tech-radar/alpha';
 import { techDocsReportIssueAddonModule } from '@backstage/plugin-techdocs-module-addons-contrib/alpha';
 import notificationsPlugin from '@backstage/plugin-notifications/alpha';
@@ -15,15 +14,24 @@ import LightIcon from '@material-ui/icons/WbSunny';
 import { myTheme } from './theme/myTheme';
 import catalogGraphPlugin from '@backstage/plugin-catalog-graph/alpha';
 import catalogGraphModule from './modules/catalogGraphModule';
+import { dynamicFrontendFeaturesLoader } from '@backstage/frontend-dynamic-feature-loader';
+
 // import { GlobalBannerBar } from './modules/banner/GlobalBannerBar';
-import GridEntityRelationsCard  from './components/catalog/GridEntityRelationsCard';
+// import GridEntityRelationsCard  from './components/catalog/GridEntityRelationsCard';
 
 
 import { bannerModule } from './modules/banner/bannerModule';
-import { bannersAdminPlugin } from './plugins/banners-admin/src/plugin/plugin';
+// import { bannersAdminPlugin } from './plugins/banners-admin/src/plugin/plugin';
 
 // import customCatalogModule from './modules/customCatalog/catalogModule';
 import {topNavbarModule} from './modules/topNavbar/topNavbarModule';
+
+
+import rbacPlugin from '@backstage-community/plugin-rbac/alpha';
+
+// ── RBAC permission nav module (sidebar gating) ──────────────────────────────
+// Adds the "Administration" sidebar item that is only visible to admin users.
+import { rbacNavModule } from './modules/rbac/rbacNavModule';
 // ── Page image banner system (section banners + empty-state banners) ────────
 // Replaces the old top-bar bannerModule.
 // All banner content is managed in app-config.yaml → pageBanners.*
@@ -81,6 +89,7 @@ const signInPage = SignInPageBlueprint.make({
 
 export default createApp({
   features: [
+    dynamicFrontendFeaturesLoader(),
     topNavbarModule,
     catalogPlugin,
     catalogGraphPlugin,
@@ -90,11 +99,13 @@ export default createApp({
     // ↓ Page image banners (section + empty-state) — config-driven
     // pageBannerModule,
     bannerModule,
-    bannersAdminPlugin,    // /banner-admin page + BannersClient API
+    // bannersAdminPlugin,   
     // globalBannerRootModule,
     techRadarPlugin,
     techDocsReportIssueAddonModule,
     notificationsPlugin,
+    rbacPlugin,
+    rbacNavModule,
     // GridEntityRelationsCard,
     // userSettingsPlugin,
     // profileAvatarModule,

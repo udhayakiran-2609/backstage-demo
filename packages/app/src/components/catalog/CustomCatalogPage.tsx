@@ -1,25 +1,24 @@
-import React from 'react';
 import {
   Content,
   Header,
   Page,
-  InfoCard,
+  // InfoCard,
 } from '@backstage/core-components';
 
 import {
   CatalogFilterLayout,
-  EntityKindPicker,
-  EntityOwnerPicker,
-  EntityTypePicker,
-  UserListPicker,
+  // EntityKindPicker,
+  // EntityOwnerPicker,
+  // EntityTypePicker,
+  // UserListPicker,
 } from '@backstage/plugin-catalog-react';
 
 import { CatalogTable } from '@backstage/plugin-catalog';
 
-import {
-  Grid,
-  Box,
-} from '@mui/material';
+// import {
+//   // Grid,
+//   Box,
+// } from '@mui/material';
 
 export const CustomCatalogPage = () => {
   return (
@@ -32,7 +31,7 @@ export const CustomCatalogPage = () => {
       <Content>
 
         {/* Statistics */}
-        <Grid container spacing={3} sx={{ mb: 4 }}>
+        {/* <Grid container spacing={3} sx={{ mb: 4 }}>
           <Grid item xs={12} md={3}>
             <InfoCard title="Components">
               19
@@ -56,12 +55,12 @@ export const CustomCatalogPage = () => {
               6
             </InfoCard>
           </Grid>
-        </Grid>
+        </Grid> */}
 
         <CatalogFilterLayout>
 
           {/* Top Filters */}
-          <CatalogFilterLayout.Filters>
+          {/* <CatalogFilterLayout.Filters>
 
             <Box
               display="flex"
@@ -75,7 +74,7 @@ export const CustomCatalogPage = () => {
               <UserListPicker />
             </Box>
 
-          </CatalogFilterLayout.Filters>
+          </CatalogFilterLayout.Filters> */}
 
           {/* Catalog Table */}
           <CatalogFilterLayout.Content>

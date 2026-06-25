@@ -20,10 +20,13 @@ backend.add(
   import('@backstage/plugin-scaffolder-backend-module-notifications'),
 );
 
-import { bannersPlugin } from './plugins/banners-backend/src';
-backend.add(bannersPlugin);
+// import {BackstagePermissionPolicy} from './permissions/permissionPolicy';
 
+// import { bannersPlugin } from './plugins/banners-backend/src';
+// backend.add(bannersPlugin);
 
+import { dynamicPluginsFeatureLoader } from '@backstage/backend-dynamic-feature-service';
+backend.add(dynamicPluginsFeatureLoader);
 // techdocs plugin
 backend.add(import('@backstage/plugin-techdocs-backend'));
 // backend.add(import('@backstage/plugin-catalog-backend-module-github'));
@@ -39,18 +42,21 @@ backend.add(import('@backstage/plugin-catalog-backend'));
 backend.add(
   import('@backstage/plugin-catalog-backend-module-scaffolder-entity-model'),
 );
+// backend.add(import('./extensions/catalogPermissionRules'));
 // See https://backstage.io/docs/features/software-catalog/configuration#subscribing-to-catalog-errors
 backend.add(import('@backstage/plugin-catalog-backend-module-logs'));
 
 // permission plugin
 backend.add(import('@backstage/plugin-permission-backend'));
+// backend.add(BackstagePermissionPolicy)
 // backend.add(import('./extensions/permissionsPolicyExtension'));
-
-
+// backend.add(BackstagePermissionPolicy);
+// backend.add(import('./extensions/catalogPermissionRules'))
+backend.add(import('@backstage-community/plugin-rbac-backend'))
 // See https://backstage.io/docs/permissions/getting-started for how to create your own permission policy
-backend.add(
-  import('@backstage/plugin-permission-backend-module-allow-all-policy'),
-);
+// backend.add(
+//   import('@backstage/plugin-permission-backend-module-allow-all-policy'),
+// );
 
 // search plugin
 backend.add(import('@backstage/plugin-search-backend'));
@@ -88,4 +94,5 @@ backend.add(import('@backstage/plugin-catalog-backend-module-github/alpha')); //
 
 // backend.add(import('@backstage/plugin-auth-backend-module-google-provider'));
 // backend.add(import('@backstage/plugin-auth-backend-module-okta-provider'));
+// backend.add(import('@internal/backstage-plugin-banner-admin-backend'));
 backend.start();

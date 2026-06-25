@@ -12,7 +12,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { makeStyles } from '@material-ui/core/styles';
 import { Banner, BannerInput } from '../api/BannersClient';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     dialogPaper: {
         borderRadius: 24,
         overflow: 'hidden',

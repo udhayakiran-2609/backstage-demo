@@ -47,10 +47,8 @@ export class BannersClient implements BannersApi {
       const text = await res.text().catch(() => res.statusText);
       throw new Error(`Banners API error ${res.status}: ${text}`);
     }
-    // 204 No Content — nothing to parse
     if (res.status === 204) return undefined as unknown as T;
-    const data = await res.json();
-    return data;
+    return await res.json();
   }
 
   async getAll(): Promise<Banner[]> {

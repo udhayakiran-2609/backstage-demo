@@ -1,0 +1,64 @@
+# =============================================================================
+# RBAC CONDITIONAL POLICIES
+# Applied ON TOP of the CSV policies. Conditions filter resources dynamically.
+# The $currentUser alias is replaced at runtime with the signed-in user's ref.
+# =============================================================================
+
+conditions:
+  # ── Owner: can only UPDATE catalog entities they own ─────────────────────────
+  - result: CONDITIONAL
+    roleEntityRef: role:default/owner
+    pluginId: catalog
+    resourceType: catalog-entity
+    permissionMapping:
+      - update
+    conditions:
+      rule: IS_ENTITY_OWNER
+      resourceType: catalog-entity
+      params:
+        claims:
+          - '$currentUser'
+
+  # ── Owner: can only DELETE catalog entities they own ─────────────────────────
+  - result: CONDITIONAL
+    roleEntityRef: role:default/owner
+    pluginId: catalog
+    resourceType: catalog-entity
+    permissionMapping:
+      - delete
+    conditions:
+      rule: IS_ENTITY_OWNER
+      resourceType: catalog-entity
+      params:
+        claims:
+          - '$currentUser'
+
+  # ── User: can READ all catalog entities EXCEPT private/restricted ones ────────
+  - result: CONDITIONAL
+    roleEntityRef: role:default/user
+    pluginId: catalog
+    resourceType: catalog-entity
+    permissionMapping:
+      - read
+    conditions:
+      # Allow reading anything that is NOT tagged as "private"
+      not:
+        rule: HAS_METADATA
+        resourceType: catalog-entity
+        params:
+          key: tags
+          value: private
+
+  # ── User: can only cancel their own scaffolder tasks ──────────────────────────
+  # (scaffolder task ownership is checked via task creator = $currentUser)
+  - result: CONDITIONAL
+    roleEntityRef: role:default/user
+    pluginId: scaffolder
+    resourceType: scaffolder-task
+    permissionMapping:
+      - cancel
+    conditions:
+      rule: IS_TASK_CREATOR
+      resourceType: scaffolder-task
+      params:
+        createdBy: '$currentUser'

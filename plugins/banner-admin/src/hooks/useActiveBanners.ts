@@ -3,21 +3,16 @@ import { useApi } from '@backstage/core-plugin-api';
 import { bannersApiRef, Banner } from '../api/BannersClient';
 
 const STORAGE_KEY_PREFIX = 'backstage.banner.';
-const DISMISS_TTL_MS = 60 * 60 * 1000; 
-
-function getDismissedAt(id: string): number | null {
-  try {
-    const val = localStorage.getItem(`${STORAGE_KEY_PREFIX}${id}`);
-    return val ? parseInt(val, 10) : null;
-  } catch {
-    return null;
-  }
-}
+const DISMISS_TTL_MS = 60 * 60 * 1000;
 
 function isCurrentlyDismissed(id: string): boolean {
-  const dismissedAt = getDismissedAt(id);
-  if (dismissedAt === null) return false;
-  return Date.now() - dismissedAt < DISMISS_TTL_MS;
+  try {
+    const val = localStorage.getItem(`${STORAGE_KEY_PREFIX}${id}`);
+    if (!val) return false;
+    return Date.now() - parseInt(val, 10) < DISMISS_TTL_MS;
+  } catch {
+    return false;
+  }
 }
 
 function persist(id: string): void {
@@ -31,6 +26,7 @@ export function useActiveBanners() {
   const [banners, setBanners] = useState<Banner[]>([]);
   const [loading, setLoading] = useState(true);
   const [dismissed, setDismissed] = useState<Set<string>>(new Set());
+
   useEffect(() => {
     let cancelled = false;
     bannersApi.getActive().then(data => {
@@ -44,12 +40,14 @@ export function useActiveBanners() {
     });
     return () => { cancelled = true; };
   }, [bannersApi]);
+
   useEffect(() => {
     const tick = () =>
       setDismissed(new Set(banners.map(b => b.id).filter(isCurrentlyDismissed)));
     const interval = setInterval(tick, 60_000);
     return () => clearInterval(interval);
   }, [banners]);
+
   useEffect(() => {
     const handler = () =>
       setDismissed(new Set(banners.map(b => b.id).filter(isCurrentlyDismissed)));
@@ -63,6 +61,5 @@ export function useActiveBanners() {
   }, []);
 
   const activeBanners = banners.filter(b => !dismissed.has(b.id));
-
   return { activeBanners, dismiss, loading };
 }

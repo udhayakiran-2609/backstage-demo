@@ -20,7 +20,7 @@ const GRAPH_SELECTOR = 'svg#dependency-graph';
    THEME BUTTON — pill-shaped selector
    ================================================================ */
 function ThemeButton({
-  id, label, icon, swatch, active, onClick,
+   label, icon, swatch, active, onClick,
 }: {
   id: GraphThemeId; label: string; icon: string;
   swatch: string; active: boolean; onClick: () => void;
@@ -121,6 +121,7 @@ export function GraphThemePicker() {
     </div>
   );
 }
+
 
 /* ================================================================
    SETTINGS CARD — drop into Settings > Appearance
@@ -330,7 +331,7 @@ export function GraphThemePickerGlobal() {
   const spaceBelow = viewport.h - (rect.top + BUTTON_SIZE) - GAP - 16;
   const spaceAbove = rect.top - GAP - 16;
   const openUp = spaceBelow < 280 && spaceAbove > spaceBelow;
-  const maxPanelHeight = Math.max(160, openUp ? spaceAbove : spaceBelow);
+  // const maxPanelHeight = Math.max(160, openUp ? spaceAbove : spaceBelow);
 
   // Clamp horizontally so the panel never runs off the left edge on
   // narrow windows, regardless of how far right the button itself sits.

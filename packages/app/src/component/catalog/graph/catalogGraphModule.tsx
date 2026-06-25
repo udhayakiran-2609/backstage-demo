@@ -1,5 +1,4 @@
 // catalogGraphModule.tsx
-import React from 'react';
 import { createFrontendModule } from '@backstage/frontend-plugin-api';
 import { EntityCardBlueprint } from '@backstage/plugin-catalog-react/alpha';
 import { EntityRelationsGraph } from '@backstage/plugin-catalog-graph';

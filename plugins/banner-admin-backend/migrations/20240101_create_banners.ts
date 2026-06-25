@@ -12,7 +12,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('active_from').notNullable();
     table.string('active_to').notNullable();
     table.boolean('enabled').notNullable().defaultTo(true);
-    table.timestamps(true, true); 
+    table.timestamps(true, true);
   });
 }
 

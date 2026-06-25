@@ -1,4 +1,3 @@
-import React from 'react';
 import { GraphThemeSettingsCard } from '../components/GraphThemePicker';
 
 /**

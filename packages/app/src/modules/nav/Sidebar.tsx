@@ -14,6 +14,10 @@ import { SidebarSearchModal } from '@backstage/plugin-search';
 import { UserSettingsSignInAvatar } from '@backstage/plugin-user-settings';
 import { makeStyles } from '@material-ui/core/styles';
 import CampaignIcon from '@material-ui/icons/AcUnit';
+import SecurityIcon from '@material-ui/icons/Security';
+import { usePermission } from '@backstage/plugin-permission-react';
+import { policyEntityReadPermission } from '@backstage-community/plugin-rbac-common';
+
 const useStyles = makeStyles({
   '@global': {
     /* SIDEBAR */
@@ -93,6 +97,27 @@ const useStyles = makeStyles({
   },
 });
 
+// ── Admin-only RBAC nav item ──────────────────────────────────────────────────
+// Renders only when the signed-in user has `policy-entity read` permission
+// (i.e. role:default/admin). Non-admins see nothing here.
+function AdminNavItem() {
+  const permissionResult = usePermission({
+    permission: policyEntityReadPermission,
+    resourceRef: 'policy/default',
+  });
+
+  if (!permissionResult.allowed) {
+    return null;
+  }
+
+  return (
+    <SidebarItem
+      icon={SecurityIcon}
+      to="/rbac"
+      text="Administration"
+    />
+  );
+}
 export const SidebarContent = NavContentBlueprint.make({
   params: {
     component: ({ navItems }) => {
@@ -134,6 +159,9 @@ export const SidebarContent = NavContentBlueprint.make({
             to="/banner-admin"
             text="Banner Admin"
           />
+
+          {/* Admin-only: visible only to role:default/admin users */}
+          <AdminNavItem />
 
           <SidebarDivider />
 

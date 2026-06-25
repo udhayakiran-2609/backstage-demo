@@ -34,11 +34,11 @@ function persist(id: string): void {
   }
 }
 
-function clearDismissed(id: string): void {
-  try {
-    localStorage.removeItem(`${STORAGE_KEY_PREFIX}${id}`);
-  } catch {}
-}
+// function clearDismissed(id: string): void {
+//   try {
+//     localStorage.removeItem(`${STORAGE_KEY_PREFIX}${id}`);
+//   } catch {}
+// }
 
 export function useActiveBanners() {
   const [dismissed, setDismissed] = useState<Set<string>>(
