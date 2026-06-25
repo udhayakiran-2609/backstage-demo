@@ -1,6 +1,3 @@
-#!/usr/bin/env bash
-# Bundles banner-admin (frontend) and banner-admin-backend (backend)
-# as dynamic plugins into dynamic-plugins-root/
 set -euo pipefail
 
 OUTPUT_DIR="$(pwd)/dynamic-plugins-root"
