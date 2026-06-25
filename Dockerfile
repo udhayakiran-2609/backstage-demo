@@ -9,6 +9,8 @@ COPY package.json yarn.lock .yarnrc.yml ./
 COPY .yarn ./.yarn
 COPY packages/app/package.json ./packages/app/package.json
 COPY packages/backend/package.json ./packages/backend/package.json
+COPY plugins/banner-admin/package.json ./plugins/banner-admin/package.json
+COPY plugins/banner-admin-backend/package.json ./plugins/banner-admin-backend/package.json
 
 RUN yarn install --immutable
 
