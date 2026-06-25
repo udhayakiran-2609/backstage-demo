@@ -67,7 +67,7 @@ auth:
         audience: ${AUTH_OKTA_AUDIENCE}
 
 techdocs:
-  builder: external      
+  builder: local         
   generator:
     runIn: local
   publisher:
@@ -90,14 +90,15 @@ catalog:
   refreshInterval:    { seconds: 30 }
   locations:
     - type: url
-      target: target: https://raw.githubusercontent.com/udhayakiran-2609/template-structure/main/catalog-info.yaml
+      target: https://raw.githubusercontent.com/udhayakiran-2609/template-structure/main/catalog-info.yaml
+
 
     - type: url
-      target: https://github.com/sairam3333/backstage-catalog-sample3/blob/main/backstage-catalog-new/groups/org-groups.yaml
+      target: https://raw.githubusercontent.com/sairam3333/backstage-catalog-sample3/main/backstage-catalog-new/groups/org-groups.yaml
       rules:
         - allow: [Group, User]
     - type: url
-      target: https://github.com/sairam3333/backstage-catalog-sample3/blob/main/backstage-catalog-new/groups/org-users.yaml
+      target: https://raw.githubusercontent.com/sairam3333/backstage-catalog-sample3/main/backstage-catalog-new/groups/org-users.yaml
       rules:
         - allow: [Group, User]  
 
@@ -105,29 +106,23 @@ permission:
   enabled: true
 
   rbac:
-    admin:
-      users:
-        - name: user:default/udhayakaran
-
-    pluginsWithPermission:
-      - catalog
-      - scaffolder
-      - permission
-
-    policies-csv-file: ./rbac/rbac-policy.csv
-    conditionalPoliciesFile: ./rbac/rbac-conditions.yaml
-
-    defaultPermissions:
-      defaultRole: role:default/user
-
-      basicPermissions:
-        - permission: catalog.entity.read
-          effect: allow
-
-        - permission: catalog.location.read
-          effect: allow
-
-        - permission: scaffolder.task.read
-          effect: allow
+  admin:
+    users:
+      - name: user:default/udhayakaran
+  pluginsWithPermission:
+    - catalog
+    - scaffolder
+    - permission
+  policies-csv-file: ./rbac/rbac-policy.csv
+  conditionalPoliciesFile: ./rbac/rbac-conditions.yaml
+  defaultPermissions:
+    defaultRole: role:default/user
+    basicPermissions:
+      - permission: catalog.entity.read
+        effect: allow
+      - permission: catalog.location.read
+        effect: allow
+      - permission: scaffolder.task.read
+        effect: allow
         
   
