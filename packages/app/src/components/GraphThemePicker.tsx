@@ -4,12 +4,35 @@ import { useLocation } from 'react-router-dom';
 import { useGraphTheme } from '../hooks/useGraphTheme';
 import { GRAPH_THEMES, ENTITY_KIND_LABELS, GraphThemeId } from '../theme/graphThemes';
 
-const GRAPH_ROUTES = ['/catalog/', '/catalog-graph', '/visualizer/tree'];
+/* ================================================================
+   ROUTE MATCHING — uses includes() to handle base-path prefixes
+   e.g. /backstage/catalog/, /app/catalog-graph, etc.
+   ================================================================ */
+const GRAPH_ROUTE_SEGMENTS = ['catalog/', 'catalog-graph', 'visualizer/tree'];
 function isGraphRoute(p: string) {
-  return GRAPH_ROUTES.some(r => p.startsWith(r));
+  return GRAPH_ROUTE_SEGMENTS.some(r => p.includes(r));
 }
 
-const GRAPH_SELECTOR = 'svg#dependency-graph';
+/* ================================================================
+   SVG SELECTOR — tries multiple selectors in order of specificity
+   Add more entries here if your production SVG uses a different id/class
+   ================================================================ */
+const GRAPH_SELECTORS = [
+  'svg#dependency-graph',
+  'svg.dependency-graph',
+  '[data-testid="dependency-graph"] svg',
+  '.catalog-graph svg',
+  '[class*="graphWrapper"] svg',
+  '[class*="graph-wrapper"] svg',
+  'svg[class*="graph"]',
+];
+function findGraphSvg(): Element | null {
+  for (const sel of GRAPH_SELECTORS) {
+    const el = document.querySelector(sel);
+    if (el) return el;
+  }
+  return null;
+}
 
 /* ================================================================
    THEME BUTTON — pill-shaped selector
@@ -208,22 +231,31 @@ export function GraphThemeSettingsCard() {
 
 /* ================================================================
    GLOBAL FLOATING BUTTON  (🎨 top-right of the graph)
+
+   Production fixes applied:
+   1. isGraphRoute uses includes() instead of startsWith() to handle base-path prefixes
+   2. findGraphSvg() tries multiple selectors in case the SVG id/class differs in prod
+   3. Polls up to ~5s (300 rAF frames) before giving up, so late-mounting graphs are found
+   4. Skips zero-size rects (element in DOM but not yet laid out)
+   5. Falls back to a fixed corner position if SVG is never found
+   6. Renders the FAB on any graph route regardless of whether rect is resolved yet
    ================================================================ */
 export function GraphThemePickerGlobal() {
   const location = useLocation();
   const [open, setOpen] = useState(false);
   const [rect, setRect] = useState<{ top: number; bottom: number; right: number } | null>(null);
   const [viewport, setViewport] = useState({ w: window.innerWidth, h: window.innerHeight });
+  const { currentTheme, themeId, setThemeId } = useGraphTheme();
+  const cssLoadedRef = useRef(false);
 
+  // Track viewport size for panel clamping
   useEffect(() => {
     const onResize = () => setViewport({ w: window.innerWidth, h: window.innerHeight });
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  const { currentTheme, themeId, setThemeId } = useGraphTheme();
-
-  const cssLoadedRef = useRef(false);
+  // Apply theme attribute + lazy-load CSS
   useEffect(() => {
     const html = document.documentElement;
     html.setAttribute('data-cg-theme', themeId);
@@ -231,10 +263,11 @@ export function GraphThemePickerGlobal() {
     if (!cssLoadedRef.current) {
       import('../styles/catalogGraphTheme.css')
         .then(() => { cssLoadedRef.current = true; })
-        .catch(err => { console.error('Failed to load catalogGraphTheme.css', err); });
+        .catch(err => console.error('Failed to load catalogGraphTheme.css', err));
     }
   }, [themeId]);
 
+  // Poll for the graph SVG and track its position
   useEffect(() => {
     if (!isGraphRoute(location.pathname)) {
       setOpen(false);
@@ -244,18 +277,31 @@ export function GraphThemePickerGlobal() {
 
     let raf = 0;
     let cancelled = false;
+    let attempts = 0;
+    const MAX_ATTEMPTS = 300; // ~5s at 60fps — enough for slow graph renders
 
     const measure = () => {
       if (cancelled) return;
-      const el = document.querySelector(GRAPH_SELECTOR) as HTMLElement | SVGElement | null;
+      attempts++;
+
+      const el = findGraphSvg();
+
       if (el) {
-        const r = (el as Element).getBoundingClientRect();
+        const r = el.getBoundingClientRect();
+
+        // Skip zero-size rects: element is in DOM but not laid out yet
+        if (r.width === 0 && r.height === 0) {
+          if (attempts < MAX_ATTEMPTS) raf = requestAnimationFrame(measure);
+          return;
+        }
+
         setRect(prev => {
           const next = {
             top: r.top + 12,
-            bottom: r.top + 12 + 36, // top + BUTTON_SIZE
+            bottom: r.top + 12 + 36,
             right: window.innerWidth - r.right + 12,
           };
+          // Skip update if position hasn't meaningfully changed (avoid render churn)
           if (
             prev &&
             Math.abs(prev.top - next.top) < 1 &&
@@ -263,41 +309,47 @@ export function GraphThemePickerGlobal() {
           ) return prev;
           return next;
         });
-      } else {
-        setRect(prev => (prev === null ? prev : null));
-      }
-      raf = requestAnimationFrame(measure);
-    };
-    raf = requestAnimationFrame(measure);
 
+        // Keep polling so the FAB tracks if the SVG repositions
+        raf = requestAnimationFrame(measure);
+      } else {
+        // SVG not found yet — keep trying
+        if (attempts < MAX_ATTEMPTS) {
+          raf = requestAnimationFrame(measure);
+        } else {
+          // Fallback: show FAB in a fixed top-right corner so it's always accessible
+          setRect({ top: 72, bottom: 108, right: 16 });
+        }
+      }
+    };
+
+    raf = requestAnimationFrame(measure);
     return () => {
       cancelled = true;
       cancelAnimationFrame(raf);
     };
   }, [location.pathname]);
 
+  // Don't render on non-graph routes
   if (!isGraphRoute(location.pathname)) return null;
-  if (!rect) return null;
+
+  // Use resolved rect or a safe default — FAB always shows on graph routes
+  const safeRect = rect ?? { top: 72, bottom: 108, right: 16 };
 
   const BUTTON_SIZE = 36;
   const GAP = 8;
   const PANEL_WIDTH = Math.min(viewport.w - 24, 340);
 
-  // How much room is available above and below the FAB button
-  const fabTop = rect.top;
-  const fabBottom = rect.top + BUTTON_SIZE;
+  const fabTop = safeRect.top;
+  const fabBottom = safeRect.top + BUTTON_SIZE;
   const spaceBelow = viewport.h - fabBottom - GAP - 16;
   const spaceAbove = fabTop - GAP - 16;
 
-  // Open upward if there's not enough room below AND more room above
   const openUp = spaceBelow < 280 && spaceAbove > spaceBelow;
 
-  // Clamp panel horizontally so it never clips off the left edge
-  const rightOffset = Math.min(rect.right, viewport.w - PANEL_WIDTH - 12);
+  // Clamp panel so it never clips off the left edge
+  const rightOffset = Math.min(safeRect.right, viewport.w - PANEL_WIDTH - 12);
 
-  // Position the container so the FAB is always the anchor:
-  // - openUp:   container bottom sits just above nothing; panel grows upward above FAB
-  // - openDown: container top sits at the FAB top; panel grows downward below FAB
   const containerStyle: React.CSSProperties = {
     position: 'fixed',
     right: rightOffset - 10,
@@ -307,12 +359,9 @@ export function GraphThemePickerGlobal() {
     alignItems: 'flex-end',
     gap: GAP,
     transition: 'top 0.15s ease, bottom 0.15s ease, right 0.15s ease',
-    // Anchor: when opening up, fix the bottom of the container to just
-    // below the FAB so the panel expands upward. When opening down, fix
-    // the top to the FAB top so the panel expands downward.
     ...(openUp
-      ? { bottom: viewport.h - fabBottom }   // panel grows upward; FAB is at the bottom of the stack
-      : { top: fabTop }),                     // panel grows downward; FAB is at the top of the stack
+      ? { bottom: viewport.h - fabBottom }
+      : { top: fabTop }),
   };
 
   const content = (
@@ -343,7 +392,6 @@ export function GraphThemePickerGlobal() {
           borderRadius: 10,
           boxShadow: '0 8px 28px rgba(0,0,0,0.4)',
           width: PANEL_WIDTH,
-          // Cap height to available space so content never clips off-screen
           maxHeight: Math.max(160, openUp ? spaceAbove : spaceBelow),
           display: 'flex',
           flexDirection: 'column',
