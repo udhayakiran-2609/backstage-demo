@@ -97,6 +97,6 @@ backend.add(import('@backstage-community/plugin-entity-feedback-backend'));
 // backend.add(import('@backstage/plugin-auth-backend-module-google-provider'));
 // backend.add(import('@backstage/plugin-auth-backend-module-okta-provider'));
 // backend.add(import('@internal/backstage-plugin-banner-admin-backend'));
-backend.add(import('@internal/backstage-plugin-feedback-backend'));
+// backend.add(import('@internal/backstage-plugin-feedback-backend'));
 
 backend.start();

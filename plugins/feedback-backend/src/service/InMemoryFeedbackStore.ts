@@ -20,7 +20,7 @@ export class InMemoryFeedbackStore implements FeedbackStore {
   async create(input: CreateFeedbackInput): Promise<FeedbackRecord> {
     const now = new Date().toISOString();
     const record: FeedbackRecord = {
-      id: randomUUID,
+      id: randomUUID(),
       type: input.type,
       entityRef: input.entityRef ?? null,
       rating: input.rating ?? null,

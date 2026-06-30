@@ -61,7 +61,7 @@ export class DatabaseFeedbackStore implements FeedbackStore {
   async create(input: CreateFeedbackInput): Promise<FeedbackRecord> {
     const now = new Date().toISOString();
     const row = {
-      id: randomUUID,
+      id: randomUUID(),
       type: input.type,
       entity_ref: input.entityRef ?? null,
       rating: input.rating ?? null,
