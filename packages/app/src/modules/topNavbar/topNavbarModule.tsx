@@ -1,16 +1,4 @@
-/**
- * topNavbarModule.tsx — v3 (responsive)
- *
- * Breakpoints:
- *   ≥ 1024px  (desktop)   — full bar: search + Create + shortcuts + icons + avatar
- *    768–1023px (tablet)   — search + Create + icons + avatar  (shortcuts hidden)
- *    480–767px  (mid)      — icon-only search trigger + Create + icons + avatar
- *   < 480px    (mobile)   — icon-only search + compact icons + avatar (Create text hidden)
- *
- * File location:  src/modules/topNavbar/topNavbarModule.tsx
- */
-
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import {
   createFrontendModule,
   AppRootElementBlueprint,
@@ -524,7 +512,6 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
           <div className={classes.searchModalInner}>
             <SearchIcon className={classes.searchModalIcon} />
             <InputBase
-              autoFocus
               fullWidth
               className={classes.searchModalInput}
               placeholder="Search for services, docs, people, repositories..."
@@ -574,8 +561,8 @@ function CreateMenu() {
   const [open, setOpen] = useState(false);
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
   const navigate = useNavigate();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
+  // const theme = useTheme();
+  // const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
   const toggle = (e: React.MouseEvent<HTMLElement>) => {
     setAnchor(e.currentTarget);
@@ -844,29 +831,21 @@ function ProfileMenu() {
 
 function NavbarContentShim() {
   useEffect(() => {
-    const styleId = 'backstage-navbar-shim';
-    if (document.getElementById(styleId)) return;
-    const style = document.createElement('style');
-    style.id = styleId;
-    style.textContent = `
-      body > div[class*="BackstagePage-root"],
-      body > div > main,
-      #root > div > main,
-      [class*="BackstageContent-root"],
-      [class*="backstage-layout"] main,
-      main.MuiBox-root {
-        margin-top: ${NAVBAR_HEIGHT}px !important;
-      }
-      [data-testid="page-layout"],
-      .BackstageSidebar-drawer + div,
-      .BackstageSidebar-root ~ div > div:first-child > main {
-        padding-top: ${NAVBAR_HEIGHT}px !important;
-      }
-    `;
-    document.head.appendChild(style);
-    return () => {
-      document.getElementById(styleId)?.remove();
+    const updateHeaders = () => {
+      const hasPluginHeader = !!document.querySelector('.bui-PluginHeader');
+      document
+        .querySelectorAll<HTMLElement>('[data-backstage-core-header]')
+        .forEach(header => {
+          header.style.marginTop = hasPluginHeader ? '' : '50px';
+        });
     };
+    updateHeaders();
+    const observer = new MutationObserver(updateHeaders);
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+    return () => observer.disconnect();
   }, []);
   return null;
 }
@@ -941,7 +920,7 @@ function TopNavbar() {
         <div className={classes.dividerV} />
 
         {/* ── Shortcuts (desktop only — tablet sees OverflowMenu) ─────── */}
-        <Tooltip title="Tech Radar" placement="bottom">
+        {/* <Tooltip title="Tech Radar" placement="bottom">
           <Button
             className={classes.shortcutBtn}
             onClick={() => navigate('/tech-radar')}
@@ -954,7 +933,7 @@ function TopNavbar() {
           >
             TechRadar
           </Button>
-        </Tooltip>
+        </Tooltip> */}
 
         <Tooltip title="TechDocs" placement="bottom">
           <Button

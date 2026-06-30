@@ -17,6 +17,7 @@ import CampaignIcon from '@material-ui/icons/AcUnit';
 import SecurityIcon from '@material-ui/icons/Security';
 import { usePermission } from '@backstage/plugin-permission-react';
 import { policyEntityReadPermission } from '@backstage-community/plugin-rbac-common';
+import FeedbackIcon from '@material-ui/icons/Feedback';
 
 const useStyles = makeStyles({
   '@global': {
@@ -121,7 +122,7 @@ function AdminNavItem() {
 export const SidebarContent = NavContentBlueprint.make({
   params: {
     component: ({ navItems }) => {
-      useStyles();
+      // useStyles();
 
       const nav = navItems.withComponent(item => (
         <SidebarItem
@@ -149,6 +150,8 @@ export const SidebarContent = NavContentBlueprint.make({
 
             <SidebarScrollWrapper>
               {nav.rest({ sortBy: 'title' })}
+                      <SidebarItem icon={FeedbackIcon} to="feedback" text="Feedback" />
+
             </SidebarScrollWrapper>
           </SidebarGroup>
 

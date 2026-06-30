@@ -6,7 +6,6 @@ import { GRAPH_THEMES, ENTITY_KIND_LABELS, GraphThemeId } from '../theme/graphTh
 
 /* ================================================================
    ROUTE MATCHING — uses includes() to handle base-path prefixes
-   e.g. /backstage/catalog/, /app/catalog-graph, etc.
    ================================================================ */
 const GRAPH_ROUTE_SEGMENTS = ['catalog/', 'catalog-graph', 'visualizer/tree'];
 function isGraphRoute(p: string) {
@@ -15,7 +14,6 @@ function isGraphRoute(p: string) {
 
 /* ================================================================
    SVG SELECTOR — tries multiple selectors in order of specificity
-   Add more entries here if your production SVG uses a different id/class
    ================================================================ */
 const GRAPH_SELECTORS = [
   'svg#dependency-graph',
@@ -232,17 +230,20 @@ export function GraphThemeSettingsCard() {
 /* ================================================================
    GLOBAL FLOATING BUTTON  (🎨 top-right of the graph)
 
-   Production fixes applied:
-   1. isGraphRoute uses includes() instead of startsWith() to handle base-path prefixes
-   2. findGraphSvg() tries multiple selectors in case the SVG id/class differs in prod
-   3. Polls up to ~5s (300 rAF frames) before giving up, so late-mounting graphs are found
-   4. Skips zero-size rects (element in DOM but not yet laid out)
-   5. Falls back to a fixed corner position if SVG is never found
-   6. Renders the FAB on any graph route regardless of whether rect is resolved yet
+   KEY BEHAVIOUR:
+   - FAB is invisible (returns null) until the graph SVG is found
+     AND has a non-zero bounding rect.
+   - No premature fallback position — we wait for the real SVG.
+   - Once found, we keep polling with rAF so the FAB tracks if the
+     SVG repositions (resize, sidebar toggle, etc.).
+   - On route change away from a graph route, FAB hides and state resets.
    ================================================================ */
 export function GraphThemePickerGlobal() {
   const location = useLocation();
   const [open, setOpen] = useState(false);
+
+  // null  = SVG not yet found / measured  → FAB hidden
+  // object = SVG found and laid out       → FAB visible
   const [rect, setRect] = useState<{ top: number; bottom: number; right: number } | null>(null);
   const [viewport, setViewport] = useState({ w: window.innerWidth, h: window.innerHeight });
   const { currentTheme, themeId, setThemeId } = useGraphTheme();
@@ -267,41 +268,44 @@ export function GraphThemePickerGlobal() {
     }
   }, [themeId]);
 
-  // Poll for the graph SVG and track its position
+  // Poll for the graph SVG — only set rect once SVG is real and laid out
   useEffect(() => {
+    // Not a graph route: hide FAB and stop
     if (!isGraphRoute(location.pathname)) {
       setOpen(false);
       setRect(null);
       return;
     }
 
+    // Reset rect on route change so we don't show stale position
+    // while the new graph is loading
+    setRect(null);
+
     let raf = 0;
     let cancelled = false;
-    let attempts = 0;
-    const MAX_ATTEMPTS = 300; // ~5s at 60fps — enough for slow graph renders
 
     const measure = () => {
       if (cancelled) return;
-      attempts++;
 
       const el = findGraphSvg();
 
       if (el) {
         const r = el.getBoundingClientRect();
 
-        // Skip zero-size rects: element is in DOM but not laid out yet
-        if (r.width === 0 && r.height === 0) {
-          if (attempts < MAX_ATTEMPTS) raf = requestAnimationFrame(measure);
+        // SVG is in DOM but not painted yet — keep waiting
+        if (r.width === 0 || r.height === 0) {
+          raf = requestAnimationFrame(measure);
           return;
         }
 
+        // SVG is real and visible — compute FAB anchor position
         setRect(prev => {
           const next = {
             top: r.top + 12,
             bottom: r.top + 12 + 36,
             right: window.innerWidth - r.right + 12,
           };
-          // Skip update if position hasn't meaningfully changed (avoid render churn)
+          // Avoid re-render if position hasn't meaningfully changed
           if (
             prev &&
             Math.abs(prev.top - next.top) < 1 &&
@@ -310,16 +314,11 @@ export function GraphThemePickerGlobal() {
           return next;
         });
 
-        // Keep polling so the FAB tracks if the SVG repositions
+        // Keep polling so FAB tracks SVG if it moves (resize, sidebar toggle)
         raf = requestAnimationFrame(measure);
       } else {
-        // SVG not found yet — keep trying
-        if (attempts < MAX_ATTEMPTS) {
-          raf = requestAnimationFrame(measure);
-        } else {
-          // Fallback: show FAB in a fixed top-right corner so it's always accessible
-          setRect({ top: 72, bottom: 108, right: 16 });
-        }
+        // SVG not in DOM yet — keep waiting indefinitely until route changes
+        raf = requestAnimationFrame(measure);
       }
     };
 
@@ -330,25 +329,25 @@ export function GraphThemePickerGlobal() {
     };
   }, [location.pathname]);
 
-  // Don't render on non-graph routes
+  // Not a graph route — render nothing
   if (!isGraphRoute(location.pathname)) return null;
 
-  // Use resolved rect or a safe default — FAB always shows on graph routes
-  const safeRect = rect ?? { top: 72, bottom: 108, right: 16 };
+  // SVG not yet found or not yet laid out — render nothing (no flash, no wrong position)
+  if (!rect) return null;
 
   const BUTTON_SIZE = 36;
   const GAP = 8;
   const PANEL_WIDTH = Math.min(viewport.w - 24, 340);
 
-  const fabTop = safeRect.top;
-  const fabBottom = safeRect.top + BUTTON_SIZE;
+  const fabTop = rect.top;
+  const fabBottom = rect.top + BUTTON_SIZE;
   const spaceBelow = viewport.h - fabBottom - GAP - 16;
   const spaceAbove = fabTop - GAP - 16;
 
   const openUp = spaceBelow < 280 && spaceAbove > spaceBelow;
 
   // Clamp panel so it never clips off the left edge
-  const rightOffset = Math.min(safeRect.right, viewport.w - PANEL_WIDTH - 12);
+  const rightOffset = Math.min(rect.right, viewport.w - PANEL_WIDTH - 12);
 
   const containerStyle: React.CSSProperties = {
     position: 'fixed',
@@ -366,7 +365,7 @@ export function GraphThemePickerGlobal() {
 
   const content = (
     <div style={containerStyle}>
-      {/* FAB toggle */}
+      {/* FAB toggle — fade in once SVG is ready */}
       <button
         onClick={() => setOpen(v => !v)}
         title="Change graph theme"
@@ -376,9 +375,11 @@ export function GraphThemePickerGlobal() {
           color: open ? '#0f172a' : currentTheme.swatch,
           fontSize: 18, cursor: 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          boxShadow: `0 2px 10px rgba(0,0,0,0.35)`,
+          boxShadow: '0 2px 10px rgba(0,0,0,0.35)',
           transition: 'background 0.15s ease, color 0.15s ease',
           flexShrink: 0,
+          // Fade in smoothly when it first appears
+          animation: 'cgFabIn 0.2s ease both',
         }}
       >
         🎨
@@ -479,13 +480,17 @@ export function GraphThemePickerGlobal() {
       )}
 
       <style>{`
+        @keyframes cgFabIn {
+          from { opacity: 0; transform: scale(0.7); }
+          to   { opacity: 1; transform: scale(1); }
+        }
         @keyframes cgPickerIn {
-          from { opacity:0; transform: translateY(-6px); }
-          to   { opacity:1; transform: translateY(0); }
+          from { opacity: 0; transform: translateY(-6px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
         @keyframes cgPickerInUp {
-          from { opacity:0; transform: translateY(6px); }
-          to   { opacity:1; transform: translateY(0); }
+          from { opacity: 0; transform: translateY(6px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
       `}</style>
     </div>

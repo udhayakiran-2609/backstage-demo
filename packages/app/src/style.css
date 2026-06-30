@@ -1,0 +1,20 @@
+:root {
+  /* Applies to both light and dark themes */
+  .bui-Button {
+    background-color: #000;
+    color: #fff;
+  }
+}
+
+[data-theme-mode='light'] {
+  --bui-bg-app: #f8f8f8;
+  --bui-fg-primary: #000;
+}
+
+[data-theme-mode='dark'] {
+  --bui-bg-app: #333333;
+  --bui-fg-primary: #fff;
+}
+.bui-PluginHeader {
+    margin-top: 55px !important;
+}

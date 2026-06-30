@@ -1,0 +1,1 @@
+export { EntityFeedbackCard } from './EntityFeedbackCard';

@@ -16,6 +16,7 @@ import catalogGraphPlugin from '@backstage/plugin-catalog-graph/alpha';
 import catalogGraphModule from './modules/catalogGraphModule';
 import { dynamicFrontendFeaturesLoader } from '@backstage/frontend-dynamic-feature-loader';
 
+import './style.css'
 // import { GlobalBannerBar } from './modules/banner/GlobalBannerBar';
 // import GridEntityRelationsCard  from './components/catalog/GridEntityRelationsCard';
 
@@ -25,9 +26,11 @@ import { bannerModule } from './modules/banner/bannerModule';
 
 // import customCatalogModule from './modules/customCatalog/catalogModule';
 import {topNavbarModule} from './modules/topNavbar/topNavbarModule';
+import { topNavModule } from './components/TopNav/TopNavModule';
 
 
 import rbacPlugin from '@backstage-community/plugin-rbac/alpha';
+import entityFeedbackPlugin from '@backstage-community/plugin-entity-feedback/alpha';
 
 // ── RBAC permission nav module (sidebar gating) ──────────────────────────────
 // Adds the "Administration" sidebar item that is only visible to admin users.
@@ -91,6 +94,7 @@ export default createApp({
   features: [
     dynamicFrontendFeaturesLoader(),
     topNavbarModule,
+    // topNavModule,
     catalogPlugin,
     catalogGraphPlugin,
     catalogGraphModule,
@@ -106,6 +110,7 @@ export default createApp({
     notificationsPlugin,
     rbacPlugin,
     rbacNavModule,
+    entityFeedbackPlugin,
     // GridEntityRelationsCard,
     // userSettingsPlugin,
     // profileAvatarModule,
