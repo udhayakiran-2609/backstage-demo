@@ -15,6 +15,14 @@ echo "📦  Bundling backend: banner-admin-backend..."
 (cd plugins/banner-admin-backend && yarn backstage-cli package bundle \
   --output-destination "$OUTPUT_DIR")
 
+echo "📦  Bundling frontend: feedback-frontend..."
+(cd plugins/feedback && yarn backstage-cli package bundle \
+  --output-destination "$OUTPUT_DIR")
+
+echo "📦  Bundling backend: banner-admin-backend..."
+(cd plugins/feedback-backend && yarn backstage-cli package bundle \
+  --output-destination "$OUTPUT_DIR")
+
 echo ""
 echo "✅  Done. Contents of dynamic-plugins-root:"
 ls -1 "$OUTPUT_DIR"
