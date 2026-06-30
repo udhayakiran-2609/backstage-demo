@@ -11,6 +11,8 @@ COPY packages/app/package.json ./packages/app/package.json
 COPY packages/backend/package.json ./packages/backend/package.json
 COPY plugins/banner-admin/package.json ./plugins/banner-admin/package.json
 COPY plugins/banner-admin-backend/package.json ./plugins/banner-admin-backend/package.json
+COPY plugins/feedback/package.json ./plugins/feedback/package.json
+COPY plugins/feedback-backend/package.json ./plugins/feedback-backend/package.json
 
 RUN yarn install --immutable
 
