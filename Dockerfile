@@ -18,8 +18,8 @@ RUN yarn install --immutable
 
 COPY . .
 
-RUN chmod +x pack-deps.sh
-RUN ./pack-deps.sh
+# RUN chmod +x pack-deps.sh
+# RUN ./pack-deps.sh
 
 RUN yarn workspace app build
 RUN yarn workspace backend build
@@ -37,7 +37,7 @@ WORKDIR /app
 COPY --from=build /app/packages/backend/dist/bundle.tar.gz .
 RUN tar xzf bundle.tar.gz && rm bundle.tar.gz
 
-COPY --from=build /app/dynamic-plugins-root ./dynamic-plugins-root
+# COPY --from=build /app/dynamic-plugins-root ./dynamic-plugins-root
 
 COPY --from=build /app/node_modules ./node_modules
 

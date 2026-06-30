@@ -5,6 +5,7 @@ import {
   createExtensionBlueprint,
   createFrontendPlugin,
   PageBlueprint,
+  FrontendPlugin,
 } from '@backstage/frontend-plugin-api';
 import {
   EntityCardBlueprint,
@@ -98,7 +99,7 @@ const entityFeedbackCard = EntityCardBlueprint.make({
   },
 });
 
-export const feedbackPlugin = createFrontendPlugin({
+const feedbackPlugin: FrontendPlugin = createFrontendPlugin({
   pluginId: 'feedback',
   extensions: [
     feedbackApiExtension,

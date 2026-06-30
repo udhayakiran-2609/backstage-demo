@@ -1,4 +1,4 @@
-import { feedbackPlugin } from './plugin';
+import  feedbackPlugin  from './plugin';
 
 describe('feedback', () => {
   it('should export plugin', () => {

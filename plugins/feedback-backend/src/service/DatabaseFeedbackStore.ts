@@ -1,5 +1,6 @@
-import path from 'path';
 import { Knex } from 'knex';
+import {resolvePackagePath} from '@backstage/backend-plugin-api'
+
 const { randomUUID } = require('crypto');
 
 import {
@@ -51,7 +52,7 @@ function toRecord(row: FeedbackRow): FeedbackRecord {
 export class DatabaseFeedbackStore implements FeedbackStore {
   static async create(knex: Knex): Promise<DatabaseFeedbackStore> {
     await knex.migrate.latest({
-          directory: path.resolve(__dirname, '../../migrations'),
+          directory: resolvePackagePath('@internal/backstage-plugin-feedback-backend', 'migrations'),
       });
     return new DatabaseFeedbackStore(knex);
   }

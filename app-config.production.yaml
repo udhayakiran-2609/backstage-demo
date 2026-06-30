@@ -44,14 +44,14 @@ backend:
       - host: github.com
       - host: raw.githubusercontent.com
 
-dynamicPlugins:
-  rootDirectory: dynamic-plugins-root
-  frontend:
-    internal.plugin-banner-admin:
-      disabled: false
-  backend:
-    internal.plugin-banner-admin-backend:
-      disabled: false
+# dynamicPlugins:
+#   rootDirectory: dynamic-plugins-root
+#   frontend:
+#     internal.plugin-banner-admin:
+#       disabled: false
+#   backend:
+#     internal.plugin-banner-admin-backend:
+#       disabled: false
 
 integrations:
   github:

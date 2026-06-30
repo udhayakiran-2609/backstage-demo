@@ -14,7 +14,7 @@ import LightIcon from '@material-ui/icons/WbSunny';
 import { myTheme } from './theme/myTheme';
 import catalogGraphPlugin from '@backstage/plugin-catalog-graph/alpha';
 import catalogGraphModule from './modules/catalogGraphModule';
-import { dynamicFrontendFeaturesLoader } from '@backstage/frontend-dynamic-feature-loader';
+// import { dynamicFrontendFeaturesLoader } from '@backstage/frontend-dynamic-feature-loader';
 
 import './style.css'
 // import { GlobalBannerBar } from './modules/banner/GlobalBannerBar';
@@ -26,7 +26,6 @@ import { bannerModule } from './modules/banner/bannerModule';
 
 // import customCatalogModule from './modules/customCatalog/catalogModule';
 import {topNavbarModule} from './modules/topNavbar/topNavbarModule';
-import { topNavModule } from './components/TopNav/TopNavModule';
 
 
 import rbacPlugin from '@backstage-community/plugin-rbac/alpha';
@@ -92,7 +91,6 @@ const signInPage = SignInPageBlueprint.make({
 
 export default createApp({
   features: [
-    dynamicFrontendFeaturesLoader(),
     topNavbarModule,
     // topNavModule,
     catalogPlugin,
