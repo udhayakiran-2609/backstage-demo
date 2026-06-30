@@ -12,7 +12,11 @@
   },
   "backstage": {
     "role": "backend-plugin",
-    "pluginId": "feedback"
+    "pluginId": "feedback",
+    "pluginPackages": [
+      "@internal/backstage-plugin-feedback",
+      "@internal/backstage-plugin-feedback-backend"
+    ]
   },
   "scripts": {
     "start": "backstage-cli package start",
