@@ -92,8 +92,8 @@ backend.add(customOktaAuth);
 // Webhook
 
 // Webhook
-backend.add(import('@backstage/plugin-events-backend/alpha'));
-backend.add(import('@backstage/plugin-events-backend-module-github'));
+// backend.add(import('@backstage/plugin-events-backend/alpha'));
+// backend.add(import('@backstage/plugin-events-backend-module-github'));
 
 backend.add(import('@backstage-community/plugin-entity-feedback-backend'));
 

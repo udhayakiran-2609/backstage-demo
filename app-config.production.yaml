@@ -54,7 +54,6 @@ integrations:
   github:
     - host: github.com
       token: ${GITHUB_TOKEN}
-      webhookSecret: ${GITHUB_WEBHOOK_SECRET}
   bitbucketCloud:
     - username: ${BITBUCKET_USERNAME}
       token: ${BITBUCKET_TOKEN}
