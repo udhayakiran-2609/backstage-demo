@@ -95,29 +95,31 @@ catalog:
   processingInterval: { seconds: 30 }
   refreshInterval:    { seconds: 30 }
   locations:
-    - type: url
-      target: https://raw.githubusercontent.com/udhayakiran-2609/template-structure/main/catalog-info.yaml
-      rules:
-        - allow:
-            - Location
-            - Component
-            - API
-            - System
-            - Domain
-            - Resource
-            - Template
-            - User      
-            - Group 
+    # - type: url
+    #   target: https://raw.githubusercontent.com/udhayakiran-2609/template-structure/main/catalog-info.yaml
+    #   rules:
+    #     - allow:
+    #         - Location
+    #         - Component
+    #         - API
+    #         - System
+    #         - Domain
+    #         - Resource
+    #         - Template
+    #         - User      
+    #         - Group 
 
 
+    # - type: url
+    #   target: https://raw.githubusercontent.com/sairam3333/backstage-catalog-sample3/main/backstage-catalog-new/groups/org-groups.yaml
+    #   rules:
+    #     - allow: [Group, User]
+    # - type: url
+    #   target: https://raw.githubusercontent.com/sairam3333/backstage-catalog-sample3/main/backstage-catalog-new/groups/org-users.yaml
+    #   rules:
+    #     - allow: [Group, User]  
     - type: url
-      target: https://raw.githubusercontent.com/sairam3333/backstage-catalog-sample3/main/backstage-catalog-new/groups/org-groups.yaml
-      rules:
-        - allow: [Group, User]
-    - type: url
-      target: https://raw.githubusercontent.com/sairam3333/backstage-catalog-sample3/main/backstage-catalog-new/groups/org-users.yaml
-      rules:
-        - allow: [Group, User]  
+      target: https://github.com/sairam3333/backstage-catalog-sample2/blob/main/catalog-info.yaml
 
 permission:
   enabled: false
