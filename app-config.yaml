@@ -61,8 +61,6 @@ catalog:
     pullRequestBranchName: backstage-integration
   rules:
     - allow: [Component, System, API, Resource, Location, Group, User, Template]
-  processingInterval: { seconds: 30 }
-  refreshInterval:    { seconds: 30 }
   locations:
     - type: url
       target: https://bitbucket.org/calixprod/backstage-catalog/src/main/catalog-info.yaml
