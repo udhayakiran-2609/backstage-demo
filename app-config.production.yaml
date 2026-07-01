@@ -58,6 +58,9 @@ integrations:
     - host: github.com
       token: ${GITHUB_TOKEN}
       webhookSecret: ${GITHUB_WEBHOOK_SECRET}
+  bitbucketCloud:
+    - username: ${BITBUCKET_USERNAME}
+      token: ${BITBUCKET_TOKEN}
 
 auth:
   environment: production
@@ -118,6 +121,8 @@ catalog:
     #   target: https://raw.githubusercontent.com/sairam3333/backstage-catalog-sample3/main/backstage-catalog-new/groups/org-users.yaml
     #   rules:
     #     - allow: [Group, User]  
+    - type: url
+      target: https://bitbucket.org/calixprod/backstage-catalog/src/main/catalog-info.yaml
     - type: url
       target: https://github.com/sairam3333/backstage-catalog-sample2/blob/main/catalog-info.yaml
 
