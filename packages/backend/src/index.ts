@@ -29,7 +29,11 @@ import { dynamicPluginsFeatureLoader } from '@backstage/backend-dynamic-feature-
 backend.add(dynamicPluginsFeatureLoader);
 // techdocs plugin
 backend.add(import('@backstage/plugin-techdocs-backend'));
-// backend.add(import('@backstage/plugin-catalog-backend-module-github'));
+backend.add(import('@backstage/plugin-catalog-backend-module-github'));
+
+// Bitbucket Cloud plugin
+backend.add(import('@backstage/plugin-events-backend-module-bitbucket-cloud'));
+backend.add(import('@backstage/plugin-catalog-backend-module-bitbucket-cloud'));
 
 // auth plugin
 backend.add(import('@backstage/plugin-auth-backend'));
