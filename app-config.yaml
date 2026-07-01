@@ -1,6 +1,7 @@
 
 
-# PROD
+# PRODUCTION CONFIGURATION 
+
 app:
   title: Scaffolded Backstage App
   baseUrl: http://localhost:3000
