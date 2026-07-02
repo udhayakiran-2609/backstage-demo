@@ -3517,24 +3517,6 @@ __metadata:
   linkType: hard
 
 
-"@backstage/plugin-events-backend@npm:^0.6.3":
-  version: 0.6.3
-  resolution: "@backstage/plugin-events-backend@npm:0.6.3"
-  dependencies:
-    "@backstage/backend-openapi-utils": "npm:^0.6.10"
-    "@backstage/backend-plugin-api": "npm:^1.9.2"
-    "@backstage/config": "npm:^1.3.8"
-    "@backstage/errors": "npm:^1.3.1"
-    "@backstage/plugin-events-node": "npm:^0.4.23"
-    "@backstage/types": "npm:^1.2.2"
-    "@types/express": "npm:^4.17.6"
-    content-type: "npm:^1.0.5"
-    express: "npm:^4.22.0"
-    express-promise-router: "npm:^4.1.0"
-    knex: "npm:^3.0.0"
-  checksum: 10c0/0ae4a9cfe4f16200e490a229ecaf80d6877df3a2c497b5077d64ee59d34bae6e4ba8057a4cc44ceb48748b3c301101b3a2835d8e7b321f690058d60e3882af8a
-  languageName: node
-  linkType: hard
 
 "@backstage/plugin-events-node@npm:^0.4.20, @backstage/plugin-events-node@npm:^0.4.23":
   version: 0.4.23
